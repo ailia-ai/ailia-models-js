@@ -1,4 +1,4 @@
-import { Ailia } from './ailia.js';
+import { Ailia } from './ailia-js/ailia.js';
 import { CONSTANTS } from './constants.js';
 
 const VIDEO_STREAM_STATE = {
