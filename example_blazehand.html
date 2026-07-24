@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8" />
+
+    <style>
+        .io-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 100%;
+        }
+
+        .io-container>* {
+            max-width: 45vw;
+            max-height: 500px;
+        }
+
+        .io-container>* img,
+        .io-container>* video,
+        .io-container>* canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .result-container {
+            position: relative;
+        }
+
+        .result-json {
+            color: lightgrey;
+        }
+
+        .singleImageButton,
+        .videoStreamButton {
+            visibility: hidden;
+        }
+
+        .model-loaded .singleImageButton,
+        .model-loaded .videoStreamButton {
+            visibility: visible;
+        }
+
+        .status-container.error {
+            color: red;
+            font-weight: bold;
+            font-size: 1.25em;
+        }
+    </style>
+
+    <script type='module'>
+        import { Ailia } from './ailia.js';
+        import { computeBlazepalm, computeBlazehandFromPalms, computeBlazehandFromPreviousLandmarks, plotPalms, plotHands } from './blazehandUtils.js';
+        import { delay, setStatus, changeSampleImage, createAiliaWithModel, setupSampleImageRunButton, setupVideoStreamRunButton } from './demoUtils.js';
+
+        if (document.readyState === 'complete') { // Safari
+            onload();
+        }else{ // Chrome or Safari
+            window.addEventListener('load', onload);
+        }
+        
+        async function onload(){
+            const imageContainerElement = document.querySelector('.sample-image');
+            imageContainerElement.addEventListener('click', changeSampleImage.bind(null, imageContainerElement));
+
+            await Ailia.initialize();
+            const [ailiaBlazepalm, ailiaBlazehand] = await Promise.all([
+                createAiliaWithModel('blazepalm'),
+                createAiliaWithModel('blazehand'),
+            ]);
+
+            if (ailiaBlazepalm === null || ailiaBlazehand === null) {
+                setStatus('Could not load the model files from the backend', 'error');
+                return;
+            }
+
+            document.body.classList.add('model-loaded');
+            setStatus('Model ready to run');
+
+            const myresult = document.querySelector('.result-json');
+
+            async function processImage(imageElement, outputOverlayCanvas) {
+                try {
+                    var startTime = new Date();
+                    setStatus('Running palm detection');
+                    await delay(1);
+                    const palms = computeBlazepalm(ailiaBlazepalm, imageElement);
+                    setStatus('Running hand recognition');
+                    await delay(1);
+                    const hands = computeBlazehandFromPalms(ailiaBlazehand, imageElement, palms);
+                    var endTime = new Date();
+                    setStatus('The model has finished running ' + (endTime.getTime() - startTime.getTime()) + 'ms');
+
+                    plotHands(outputOverlayCanvas, hands);
+                    if (hands && hands.length > 0) {
+                        myresult.innerText = JSON.stringify(hands, null, 4);
+                    } else {
+                        myresult.innerText = '';
+                    }
+                } catch (e) {
+                    const message = `${ailiaBlazepalm.getErrorDetail()}${ailiaBlazehand.getErrorDetail()}`;
+                    console.log(e);
+                    console.error(message);
+                    setStatus(`Error while running the model: ${message}`, 'error');
+                }
+            }
+
+            let previousHands = [];
+            async function processFrame(videoElement, outputOverlayCanvas) {
+                try {
+                    var startTime = new Date();
+                    if (previousHands.length > 0) {
+                        //setStatus('Running hand recognition');
+                        await delay(1);
+                        previousHands = computeBlazehandFromPreviousLandmarks(ailiaBlazehand, videoElement, previousHands);
+                    } else {
+                        //setStatus('Running palm detection');
+                        await delay(1);
+                        const palms = computeBlazepalm(ailiaBlazepalm, videoElement);
+
+                        if (palms.length > 0) {
+                            //setStatus('Running hand recognition');
+                            await delay(1);
+                            previousHands = computeBlazehandFromPalms(ailiaBlazehand, videoElement, palms);
+                        } else {
+                            previousHands = [];
+                        }
+                    }
+                    var endTime = new Date();
+                    setStatus('The model has finished running ' + (endTime.getTime() - startTime.getTime()) + 'ms');
+
+                    plotHands(outputOverlayCanvas, previousHands);
+
+                    if (previousHands && previousHands.length > 0) {
+                        myresult.innerText = JSON.stringify(previousHands, null, 4);
+                    } else {
+                        myresult.innerText = '';
+                    }
+
+                } catch (e) {
+                    const message = `${ailiaBlazepalm.getErrorDetail()}${ailiaBlazehand.getErrorDetail()}`;
+                    console.log(e);
+                    console.error(message);
+                    setStatus(`Error while running the model: ${message}`, 'error');
+                }
+            }
+
+            setupSampleImageRunButton(processImage);
+            setupVideoStreamRunButton(processFrame);
+        }
+    </script>
+</head>
+
+<body style="background-color: #fff">
+    <h1>Blazehand</h1>
+    <p class="status-container">Checking the model files</p>
+    <button class="singleImageButton"> Run with sample image</button>
+    <button class="videoStreamButton"> Run with camera </button>
+    <div class="io-container">
+        <div class="input-container">
+            <h2>Sample image (click to change)</h2>
+            <img class="sample-image" src='person_hand.jpg'></img>
+        </div>
+        <div class="output-container">
+            <h2>Result</h2>
+            <div class="result-container"></div>
+            <p class="result-json"></p>
+        </div>
+    </div>
+</body>
+
+</html>

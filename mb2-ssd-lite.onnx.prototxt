@@ -1,0 +1,9978 @@
+ir_version: 4
+producer_name: "pytorch"
+producer_version: "1.3"
+model_version: 0
+graph {
+  name: "torch-jit-export"
+  node {
+    input: "input.1"
+    input: "base_net.0.0.weight"
+    output: "479"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+  }
+  node {
+    input: "479"
+    input: "base_net.0.1.weight"
+    input: "base_net.0.1.bias"
+    input: "base_net.0.1.running_mean"
+    input: "base_net.0.1.running_var"
+    output: "480"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "480"
+    output: "481"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "481"
+    input: "base_net.1.conv.0.weight"
+    output: "482"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 32
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "482"
+    input: "base_net.1.conv.1.weight"
+    input: "base_net.1.conv.1.bias"
+    input: "base_net.1.conv.1.running_mean"
+    input: "base_net.1.conv.1.running_var"
+    output: "483"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "483"
+    output: "484"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "484"
+    input: "base_net.1.conv.3.weight"
+    output: "485"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "485"
+    input: "base_net.1.conv.4.weight"
+    input: "base_net.1.conv.4.bias"
+    input: "base_net.1.conv.4.running_mean"
+    input: "base_net.1.conv.4.running_var"
+    output: "486"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "486"
+    input: "base_net.2.conv.0.weight"
+    output: "487"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "487"
+    input: "base_net.2.conv.1.weight"
+    input: "base_net.2.conv.1.bias"
+    input: "base_net.2.conv.1.running_mean"
+    input: "base_net.2.conv.1.running_var"
+    output: "488"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "488"
+    output: "489"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "489"
+    input: "base_net.2.conv.3.weight"
+    output: "490"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 96
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+  }
+  node {
+    input: "490"
+    input: "base_net.2.conv.4.weight"
+    input: "base_net.2.conv.4.bias"
+    input: "base_net.2.conv.4.running_mean"
+    input: "base_net.2.conv.4.running_var"
+    output: "491"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "491"
+    output: "492"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "492"
+    input: "base_net.2.conv.6.weight"
+    output: "493"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "493"
+    input: "base_net.2.conv.7.weight"
+    input: "base_net.2.conv.7.bias"
+    input: "base_net.2.conv.7.running_mean"
+    input: "base_net.2.conv.7.running_var"
+    output: "494"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "494"
+    input: "base_net.3.conv.0.weight"
+    output: "495"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "495"
+    input: "base_net.3.conv.1.weight"
+    input: "base_net.3.conv.1.bias"
+    input: "base_net.3.conv.1.running_mean"
+    input: "base_net.3.conv.1.running_var"
+    output: "496"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "496"
+    output: "497"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "497"
+    input: "base_net.3.conv.3.weight"
+    output: "498"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 144
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "498"
+    input: "base_net.3.conv.4.weight"
+    input: "base_net.3.conv.4.bias"
+    input: "base_net.3.conv.4.running_mean"
+    input: "base_net.3.conv.4.running_var"
+    output: "499"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "499"
+    output: "500"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "500"
+    input: "base_net.3.conv.6.weight"
+    output: "501"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "501"
+    input: "base_net.3.conv.7.weight"
+    input: "base_net.3.conv.7.bias"
+    input: "base_net.3.conv.7.running_mean"
+    input: "base_net.3.conv.7.running_var"
+    output: "502"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "494"
+    input: "502"
+    output: "503"
+    op_type: "Add"
+  }
+  node {
+    input: "503"
+    input: "base_net.4.conv.0.weight"
+    output: "504"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "504"
+    input: "base_net.4.conv.1.weight"
+    input: "base_net.4.conv.1.bias"
+    input: "base_net.4.conv.1.running_mean"
+    input: "base_net.4.conv.1.running_var"
+    output: "505"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "505"
+    output: "506"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "506"
+    input: "base_net.4.conv.3.weight"
+    output: "507"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 144
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+  }
+  node {
+    input: "507"
+    input: "base_net.4.conv.4.weight"
+    input: "base_net.4.conv.4.bias"
+    input: "base_net.4.conv.4.running_mean"
+    input: "base_net.4.conv.4.running_var"
+    output: "508"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "508"
+    output: "509"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "509"
+    input: "base_net.4.conv.6.weight"
+    output: "510"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "510"
+    input: "base_net.4.conv.7.weight"
+    input: "base_net.4.conv.7.bias"
+    input: "base_net.4.conv.7.running_mean"
+    input: "base_net.4.conv.7.running_var"
+    output: "511"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "511"
+    input: "base_net.5.conv.0.weight"
+    output: "512"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "512"
+    input: "base_net.5.conv.1.weight"
+    input: "base_net.5.conv.1.bias"
+    input: "base_net.5.conv.1.running_mean"
+    input: "base_net.5.conv.1.running_var"
+    output: "513"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "513"
+    output: "514"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "514"
+    input: "base_net.5.conv.3.weight"
+    output: "515"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 192
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "515"
+    input: "base_net.5.conv.4.weight"
+    input: "base_net.5.conv.4.bias"
+    input: "base_net.5.conv.4.running_mean"
+    input: "base_net.5.conv.4.running_var"
+    output: "516"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "516"
+    output: "517"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "517"
+    input: "base_net.5.conv.6.weight"
+    output: "518"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "518"
+    input: "base_net.5.conv.7.weight"
+    input: "base_net.5.conv.7.bias"
+    input: "base_net.5.conv.7.running_mean"
+    input: "base_net.5.conv.7.running_var"
+    output: "519"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "511"
+    input: "519"
+    output: "520"
+    op_type: "Add"
+  }
+  node {
+    input: "520"
+    input: "base_net.6.conv.0.weight"
+    output: "521"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "521"
+    input: "base_net.6.conv.1.weight"
+    input: "base_net.6.conv.1.bias"
+    input: "base_net.6.conv.1.running_mean"
+    input: "base_net.6.conv.1.running_var"
+    output: "522"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "522"
+    output: "523"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "523"
+    input: "base_net.6.conv.3.weight"
+    output: "524"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 192
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "524"
+    input: "base_net.6.conv.4.weight"
+    input: "base_net.6.conv.4.bias"
+    input: "base_net.6.conv.4.running_mean"
+    input: "base_net.6.conv.4.running_var"
+    output: "525"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "525"
+    output: "526"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "526"
+    input: "base_net.6.conv.6.weight"
+    output: "527"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "527"
+    input: "base_net.6.conv.7.weight"
+    input: "base_net.6.conv.7.bias"
+    input: "base_net.6.conv.7.running_mean"
+    input: "base_net.6.conv.7.running_var"
+    output: "528"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "520"
+    input: "528"
+    output: "529"
+    op_type: "Add"
+  }
+  node {
+    input: "529"
+    input: "base_net.7.conv.0.weight"
+    output: "530"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "530"
+    input: "base_net.7.conv.1.weight"
+    input: "base_net.7.conv.1.bias"
+    input: "base_net.7.conv.1.running_mean"
+    input: "base_net.7.conv.1.running_var"
+    output: "531"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "531"
+    output: "532"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "532"
+    input: "base_net.7.conv.3.weight"
+    output: "533"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 192
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+  }
+  node {
+    input: "533"
+    input: "base_net.7.conv.4.weight"
+    input: "base_net.7.conv.4.bias"
+    input: "base_net.7.conv.4.running_mean"
+    input: "base_net.7.conv.4.running_var"
+    output: "534"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "534"
+    output: "535"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "535"
+    input: "base_net.7.conv.6.weight"
+    output: "536"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "536"
+    input: "base_net.7.conv.7.weight"
+    input: "base_net.7.conv.7.bias"
+    input: "base_net.7.conv.7.running_mean"
+    input: "base_net.7.conv.7.running_var"
+    output: "537"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "537"
+    input: "base_net.8.conv.0.weight"
+    output: "538"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "538"
+    input: "base_net.8.conv.1.weight"
+    input: "base_net.8.conv.1.bias"
+    input: "base_net.8.conv.1.running_mean"
+    input: "base_net.8.conv.1.running_var"
+    output: "539"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "539"
+    output: "540"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "540"
+    input: "base_net.8.conv.3.weight"
+    output: "541"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 384
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "541"
+    input: "base_net.8.conv.4.weight"
+    input: "base_net.8.conv.4.bias"
+    input: "base_net.8.conv.4.running_mean"
+    input: "base_net.8.conv.4.running_var"
+    output: "542"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "542"
+    output: "543"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "543"
+    input: "base_net.8.conv.6.weight"
+    output: "544"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "544"
+    input: "base_net.8.conv.7.weight"
+    input: "base_net.8.conv.7.bias"
+    input: "base_net.8.conv.7.running_mean"
+    input: "base_net.8.conv.7.running_var"
+    output: "545"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "537"
+    input: "545"
+    output: "546"
+    op_type: "Add"
+  }
+  node {
+    input: "546"
+    input: "base_net.9.conv.0.weight"
+    output: "547"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "547"
+    input: "base_net.9.conv.1.weight"
+    input: "base_net.9.conv.1.bias"
+    input: "base_net.9.conv.1.running_mean"
+    input: "base_net.9.conv.1.running_var"
+    output: "548"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "548"
+    output: "549"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "549"
+    input: "base_net.9.conv.3.weight"
+    output: "550"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 384
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "550"
+    input: "base_net.9.conv.4.weight"
+    input: "base_net.9.conv.4.bias"
+    input: "base_net.9.conv.4.running_mean"
+    input: "base_net.9.conv.4.running_var"
+    output: "551"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "551"
+    output: "552"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "552"
+    input: "base_net.9.conv.6.weight"
+    output: "553"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "553"
+    input: "base_net.9.conv.7.weight"
+    input: "base_net.9.conv.7.bias"
+    input: "base_net.9.conv.7.running_mean"
+    input: "base_net.9.conv.7.running_var"
+    output: "554"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "546"
+    input: "554"
+    output: "555"
+    op_type: "Add"
+  }
+  node {
+    input: "555"
+    input: "base_net.10.conv.0.weight"
+    output: "556"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "556"
+    input: "base_net.10.conv.1.weight"
+    input: "base_net.10.conv.1.bias"
+    input: "base_net.10.conv.1.running_mean"
+    input: "base_net.10.conv.1.running_var"
+    output: "557"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "557"
+    output: "558"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "558"
+    input: "base_net.10.conv.3.weight"
+    output: "559"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 384
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "559"
+    input: "base_net.10.conv.4.weight"
+    input: "base_net.10.conv.4.bias"
+    input: "base_net.10.conv.4.running_mean"
+    input: "base_net.10.conv.4.running_var"
+    output: "560"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "560"
+    output: "561"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "561"
+    input: "base_net.10.conv.6.weight"
+    output: "562"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "562"
+    input: "base_net.10.conv.7.weight"
+    input: "base_net.10.conv.7.bias"
+    input: "base_net.10.conv.7.running_mean"
+    input: "base_net.10.conv.7.running_var"
+    output: "563"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "555"
+    input: "563"
+    output: "564"
+    op_type: "Add"
+  }
+  node {
+    input: "564"
+    input: "base_net.11.conv.0.weight"
+    output: "565"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "565"
+    input: "base_net.11.conv.1.weight"
+    input: "base_net.11.conv.1.bias"
+    input: "base_net.11.conv.1.running_mean"
+    input: "base_net.11.conv.1.running_var"
+    output: "566"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "566"
+    output: "567"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "567"
+    input: "base_net.11.conv.3.weight"
+    output: "568"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 384
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "568"
+    input: "base_net.11.conv.4.weight"
+    input: "base_net.11.conv.4.bias"
+    input: "base_net.11.conv.4.running_mean"
+    input: "base_net.11.conv.4.running_var"
+    output: "569"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "569"
+    output: "570"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "570"
+    input: "base_net.11.conv.6.weight"
+    output: "571"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "571"
+    input: "base_net.11.conv.7.weight"
+    input: "base_net.11.conv.7.bias"
+    input: "base_net.11.conv.7.running_mean"
+    input: "base_net.11.conv.7.running_var"
+    output: "572"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "572"
+    input: "base_net.12.conv.0.weight"
+    output: "573"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "573"
+    input: "base_net.12.conv.1.weight"
+    input: "base_net.12.conv.1.bias"
+    input: "base_net.12.conv.1.running_mean"
+    input: "base_net.12.conv.1.running_var"
+    output: "574"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "574"
+    output: "575"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "575"
+    input: "base_net.12.conv.3.weight"
+    output: "576"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 576
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "576"
+    input: "base_net.12.conv.4.weight"
+    input: "base_net.12.conv.4.bias"
+    input: "base_net.12.conv.4.running_mean"
+    input: "base_net.12.conv.4.running_var"
+    output: "577"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "577"
+    output: "578"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "578"
+    input: "base_net.12.conv.6.weight"
+    output: "579"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "579"
+    input: "base_net.12.conv.7.weight"
+    input: "base_net.12.conv.7.bias"
+    input: "base_net.12.conv.7.running_mean"
+    input: "base_net.12.conv.7.running_var"
+    output: "580"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "572"
+    input: "580"
+    output: "581"
+    op_type: "Add"
+  }
+  node {
+    input: "581"
+    input: "base_net.13.conv.0.weight"
+    output: "582"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "582"
+    input: "base_net.13.conv.1.weight"
+    input: "base_net.13.conv.1.bias"
+    input: "base_net.13.conv.1.running_mean"
+    input: "base_net.13.conv.1.running_var"
+    output: "583"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "583"
+    output: "584"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "584"
+    input: "base_net.13.conv.3.weight"
+    output: "585"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 576
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "585"
+    input: "base_net.13.conv.4.weight"
+    input: "base_net.13.conv.4.bias"
+    input: "base_net.13.conv.4.running_mean"
+    input: "base_net.13.conv.4.running_var"
+    output: "586"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "586"
+    output: "587"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "587"
+    input: "base_net.13.conv.6.weight"
+    output: "588"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "588"
+    input: "base_net.13.conv.7.weight"
+    input: "base_net.13.conv.7.bias"
+    input: "base_net.13.conv.7.running_mean"
+    input: "base_net.13.conv.7.running_var"
+    output: "589"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "581"
+    input: "589"
+    output: "590"
+    op_type: "Add"
+  }
+  node {
+    input: "590"
+    input: "base_net.14.conv.0.weight"
+    output: "591"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "591"
+    input: "base_net.14.conv.1.weight"
+    input: "base_net.14.conv.1.bias"
+    input: "base_net.14.conv.1.running_mean"
+    input: "base_net.14.conv.1.running_var"
+    output: "592"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "592"
+    output: "593"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "593"
+    input: "base_net.14.conv.3.weight"
+    output: "594"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 576
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+  }
+  node {
+    input: "594"
+    input: "base_net.14.conv.4.weight"
+    input: "base_net.14.conv.4.bias"
+    input: "base_net.14.conv.4.running_mean"
+    input: "base_net.14.conv.4.running_var"
+    output: "595"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "595"
+    output: "596"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "596"
+    input: "base_net.14.conv.6.weight"
+    output: "597"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "597"
+    input: "base_net.14.conv.7.weight"
+    input: "base_net.14.conv.7.bias"
+    input: "base_net.14.conv.7.running_mean"
+    input: "base_net.14.conv.7.running_var"
+    output: "598"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "593"
+    input: "classification_headers.0.0.weight"
+    input: "classification_headers.0.0.bias"
+    output: "599"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 576
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "599"
+    input: "classification_headers.0.1.weight"
+    input: "classification_headers.0.1.bias"
+    input: "classification_headers.0.1.running_mean"
+    input: "classification_headers.0.1.running_var"
+    output: "600"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "600"
+    output: "601"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "601"
+    input: "classification_headers.0.3.weight"
+    input: "classification_headers.0.3.bias"
+    output: "602"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "602"
+    output: "603"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    output: "604"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "603"
+    output: "605"
+    op_type: "Shape"
+  }
+  node {
+    input: "605"
+    input: "604"
+    output: "606"
+    op_type: "Gather"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    output: "607"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "608"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "606"
+    output: "609"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "607"
+    output: "610"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "608"
+    output: "611"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "609"
+    input: "610"
+    input: "611"
+    output: "612"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    input: "603"
+    input: "612"
+    output: "613"
+    op_type: "Reshape"
+  }
+  node {
+    input: "593"
+    input: "regression_headers.0.0.weight"
+    input: "regression_headers.0.0.bias"
+    output: "614"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 576
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "614"
+    input: "regression_headers.0.1.weight"
+    input: "regression_headers.0.1.bias"
+    input: "regression_headers.0.1.running_mean"
+    input: "regression_headers.0.1.running_var"
+    output: "615"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "615"
+    output: "616"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "616"
+    input: "regression_headers.0.3.weight"
+    input: "regression_headers.0.3.bias"
+    output: "617"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "617"
+    output: "618"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    output: "619"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "618"
+    output: "620"
+    op_type: "Shape"
+  }
+  node {
+    input: "620"
+    input: "619"
+    output: "621"
+    op_type: "Gather"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    output: "622"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "623"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "621"
+    output: "624"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "622"
+    output: "625"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "623"
+    output: "626"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "624"
+    input: "625"
+    input: "626"
+    output: "627"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    input: "618"
+    input: "627"
+    output: "628"
+    op_type: "Reshape"
+  }
+  node {
+    input: "598"
+    input: "base_net.15.conv.0.weight"
+    output: "629"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "629"
+    input: "base_net.15.conv.1.weight"
+    input: "base_net.15.conv.1.bias"
+    input: "base_net.15.conv.1.running_mean"
+    input: "base_net.15.conv.1.running_var"
+    output: "630"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "630"
+    output: "631"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "631"
+    input: "base_net.15.conv.3.weight"
+    output: "632"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 960
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "632"
+    input: "base_net.15.conv.4.weight"
+    input: "base_net.15.conv.4.bias"
+    input: "base_net.15.conv.4.running_mean"
+    input: "base_net.15.conv.4.running_var"
+    output: "633"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "633"
+    output: "634"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "634"
+    input: "base_net.15.conv.6.weight"
+    output: "635"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "635"
+    input: "base_net.15.conv.7.weight"
+    input: "base_net.15.conv.7.bias"
+    input: "base_net.15.conv.7.running_mean"
+    input: "base_net.15.conv.7.running_var"
+    output: "636"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "598"
+    input: "636"
+    output: "637"
+    op_type: "Add"
+  }
+  node {
+    input: "637"
+    input: "base_net.16.conv.0.weight"
+    output: "638"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "638"
+    input: "base_net.16.conv.1.weight"
+    input: "base_net.16.conv.1.bias"
+    input: "base_net.16.conv.1.running_mean"
+    input: "base_net.16.conv.1.running_var"
+    output: "639"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "639"
+    output: "640"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "640"
+    input: "base_net.16.conv.3.weight"
+    output: "641"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 960
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "641"
+    input: "base_net.16.conv.4.weight"
+    input: "base_net.16.conv.4.bias"
+    input: "base_net.16.conv.4.running_mean"
+    input: "base_net.16.conv.4.running_var"
+    output: "642"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "642"
+    output: "643"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "643"
+    input: "base_net.16.conv.6.weight"
+    output: "644"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "644"
+    input: "base_net.16.conv.7.weight"
+    input: "base_net.16.conv.7.bias"
+    input: "base_net.16.conv.7.running_mean"
+    input: "base_net.16.conv.7.running_var"
+    output: "645"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "637"
+    input: "645"
+    output: "646"
+    op_type: "Add"
+  }
+  node {
+    input: "646"
+    input: "base_net.17.conv.0.weight"
+    output: "647"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "647"
+    input: "base_net.17.conv.1.weight"
+    input: "base_net.17.conv.1.bias"
+    input: "base_net.17.conv.1.running_mean"
+    input: "base_net.17.conv.1.running_var"
+    output: "648"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "648"
+    output: "649"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "649"
+    input: "base_net.17.conv.3.weight"
+    output: "650"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 960
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "650"
+    input: "base_net.17.conv.4.weight"
+    input: "base_net.17.conv.4.bias"
+    input: "base_net.17.conv.4.running_mean"
+    input: "base_net.17.conv.4.running_var"
+    output: "651"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "651"
+    output: "652"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "652"
+    input: "base_net.17.conv.6.weight"
+    output: "653"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "653"
+    input: "base_net.17.conv.7.weight"
+    input: "base_net.17.conv.7.bias"
+    input: "base_net.17.conv.7.running_mean"
+    input: "base_net.17.conv.7.running_var"
+    output: "654"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "654"
+    input: "base_net.18.0.weight"
+    output: "655"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "655"
+    input: "base_net.18.1.weight"
+    input: "base_net.18.1.bias"
+    input: "base_net.18.1.running_mean"
+    input: "base_net.18.1.running_var"
+    output: "656"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "656"
+    output: "657"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "657"
+    input: "classification_headers.1.0.weight"
+    input: "classification_headers.1.0.bias"
+    output: "658"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1280
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "658"
+    input: "classification_headers.1.1.weight"
+    input: "classification_headers.1.1.bias"
+    input: "classification_headers.1.1.running_mean"
+    input: "classification_headers.1.1.running_var"
+    output: "659"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "659"
+    output: "660"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "660"
+    input: "classification_headers.1.3.weight"
+    input: "classification_headers.1.3.bias"
+    output: "661"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "661"
+    output: "662"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    output: "663"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "662"
+    output: "664"
+    op_type: "Shape"
+  }
+  node {
+    input: "664"
+    input: "663"
+    output: "665"
+    op_type: "Gather"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    output: "666"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "667"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "665"
+    output: "668"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "666"
+    output: "669"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "667"
+    output: "670"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "668"
+    input: "669"
+    input: "670"
+    output: "671"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    input: "662"
+    input: "671"
+    output: "672"
+    op_type: "Reshape"
+  }
+  node {
+    input: "657"
+    input: "regression_headers.1.0.weight"
+    input: "regression_headers.1.0.bias"
+    output: "673"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1280
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "673"
+    input: "regression_headers.1.1.weight"
+    input: "regression_headers.1.1.bias"
+    input: "regression_headers.1.1.running_mean"
+    input: "regression_headers.1.1.running_var"
+    output: "674"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "674"
+    output: "675"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "675"
+    input: "regression_headers.1.3.weight"
+    input: "regression_headers.1.3.bias"
+    output: "676"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "676"
+    output: "677"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    output: "678"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "677"
+    output: "679"
+    op_type: "Shape"
+  }
+  node {
+    input: "679"
+    input: "678"
+    output: "680"
+    op_type: "Gather"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    output: "681"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "682"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "680"
+    output: "683"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "681"
+    output: "684"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "682"
+    output: "685"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "683"
+    input: "684"
+    input: "685"
+    output: "686"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    input: "677"
+    input: "686"
+    output: "687"
+    op_type: "Reshape"
+  }
+  node {
+    input: "657"
+    input: "extras.0.conv.0.weight"
+    output: "688"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "688"
+    input: "extras.0.conv.1.weight"
+    input: "extras.0.conv.1.bias"
+    input: "extras.0.conv.1.running_mean"
+    input: "extras.0.conv.1.running_var"
+    output: "689"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "689"
+    output: "690"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "690"
+    input: "extras.0.conv.3.weight"
+    output: "691"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 256
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+  }
+  node {
+    input: "691"
+    input: "extras.0.conv.4.weight"
+    input: "extras.0.conv.4.bias"
+    input: "extras.0.conv.4.running_mean"
+    input: "extras.0.conv.4.running_var"
+    output: "692"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "692"
+    output: "693"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "693"
+    input: "extras.0.conv.6.weight"
+    output: "694"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "694"
+    input: "extras.0.conv.7.weight"
+    input: "extras.0.conv.7.bias"
+    input: "extras.0.conv.7.running_mean"
+    input: "extras.0.conv.7.running_var"
+    output: "695"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "695"
+    input: "classification_headers.2.0.weight"
+    input: "classification_headers.2.0.bias"
+    output: "696"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 512
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "696"
+    input: "classification_headers.2.1.weight"
+    input: "classification_headers.2.1.bias"
+    input: "classification_headers.2.1.running_mean"
+    input: "classification_headers.2.1.running_var"
+    output: "697"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "697"
+    output: "698"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "698"
+    input: "classification_headers.2.3.weight"
+    input: "classification_headers.2.3.bias"
+    output: "699"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "699"
+    output: "700"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    output: "701"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "700"
+    output: "702"
+    op_type: "Shape"
+  }
+  node {
+    input: "702"
+    input: "701"
+    output: "703"
+    op_type: "Gather"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    output: "704"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "705"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "703"
+    output: "706"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "704"
+    output: "707"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "705"
+    output: "708"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "706"
+    input: "707"
+    input: "708"
+    output: "709"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    input: "700"
+    input: "709"
+    output: "710"
+    op_type: "Reshape"
+  }
+  node {
+    input: "695"
+    input: "regression_headers.2.0.weight"
+    input: "regression_headers.2.0.bias"
+    output: "711"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 512
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "711"
+    input: "regression_headers.2.1.weight"
+    input: "regression_headers.2.1.bias"
+    input: "regression_headers.2.1.running_mean"
+    input: "regression_headers.2.1.running_var"
+    output: "712"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "712"
+    output: "713"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "713"
+    input: "regression_headers.2.3.weight"
+    input: "regression_headers.2.3.bias"
+    output: "714"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "714"
+    output: "715"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    output: "716"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "715"
+    output: "717"
+    op_type: "Shape"
+  }
+  node {
+    input: "717"
+    input: "716"
+    output: "718"
+    op_type: "Gather"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    output: "719"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "720"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "718"
+    output: "721"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "719"
+    output: "722"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "720"
+    output: "723"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "721"
+    input: "722"
+    input: "723"
+    output: "724"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    input: "715"
+    input: "724"
+    output: "725"
+    op_type: "Reshape"
+  }
+  node {
+    input: "695"
+    input: "extras.1.conv.0.weight"
+    output: "726"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "726"
+    input: "extras.1.conv.1.weight"
+    input: "extras.1.conv.1.bias"
+    input: "extras.1.conv.1.running_mean"
+    input: "extras.1.conv.1.running_var"
+    output: "727"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "727"
+    output: "728"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "728"
+    input: "extras.1.conv.3.weight"
+    output: "729"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 128
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+  }
+  node {
+    input: "729"
+    input: "extras.1.conv.4.weight"
+    input: "extras.1.conv.4.bias"
+    input: "extras.1.conv.4.running_mean"
+    input: "extras.1.conv.4.running_var"
+    output: "730"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "730"
+    output: "731"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "731"
+    input: "extras.1.conv.6.weight"
+    output: "732"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "732"
+    input: "extras.1.conv.7.weight"
+    input: "extras.1.conv.7.bias"
+    input: "extras.1.conv.7.running_mean"
+    input: "extras.1.conv.7.running_var"
+    output: "733"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "733"
+    input: "classification_headers.3.0.weight"
+    input: "classification_headers.3.0.bias"
+    output: "734"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 256
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "734"
+    input: "classification_headers.3.1.weight"
+    input: "classification_headers.3.1.bias"
+    input: "classification_headers.3.1.running_mean"
+    input: "classification_headers.3.1.running_var"
+    output: "735"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "735"
+    output: "736"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "736"
+    input: "classification_headers.3.3.weight"
+    input: "classification_headers.3.3.bias"
+    output: "737"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "737"
+    output: "738"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    output: "739"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "738"
+    output: "740"
+    op_type: "Shape"
+  }
+  node {
+    input: "740"
+    input: "739"
+    output: "741"
+    op_type: "Gather"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    output: "742"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "743"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "741"
+    output: "744"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "742"
+    output: "745"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "743"
+    output: "746"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "744"
+    input: "745"
+    input: "746"
+    output: "747"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    input: "738"
+    input: "747"
+    output: "748"
+    op_type: "Reshape"
+  }
+  node {
+    input: "733"
+    input: "regression_headers.3.0.weight"
+    input: "regression_headers.3.0.bias"
+    output: "749"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 256
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "749"
+    input: "regression_headers.3.1.weight"
+    input: "regression_headers.3.1.bias"
+    input: "regression_headers.3.1.running_mean"
+    input: "regression_headers.3.1.running_var"
+    output: "750"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "750"
+    output: "751"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "751"
+    input: "regression_headers.3.3.weight"
+    input: "regression_headers.3.3.bias"
+    output: "752"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "752"
+    output: "753"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    output: "754"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "753"
+    output: "755"
+    op_type: "Shape"
+  }
+  node {
+    input: "755"
+    input: "754"
+    output: "756"
+    op_type: "Gather"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    output: "757"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "758"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "756"
+    output: "759"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "757"
+    output: "760"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "758"
+    output: "761"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "759"
+    input: "760"
+    input: "761"
+    output: "762"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    input: "753"
+    input: "762"
+    output: "763"
+    op_type: "Reshape"
+  }
+  node {
+    input: "733"
+    input: "extras.2.conv.0.weight"
+    output: "764"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "764"
+    input: "extras.2.conv.1.weight"
+    input: "extras.2.conv.1.bias"
+    input: "extras.2.conv.1.running_mean"
+    input: "extras.2.conv.1.running_var"
+    output: "765"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "765"
+    output: "766"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "766"
+    input: "extras.2.conv.3.weight"
+    output: "767"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 128
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+  }
+  node {
+    input: "767"
+    input: "extras.2.conv.4.weight"
+    input: "extras.2.conv.4.bias"
+    input: "extras.2.conv.4.running_mean"
+    input: "extras.2.conv.4.running_var"
+    output: "768"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "768"
+    output: "769"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "769"
+    input: "extras.2.conv.6.weight"
+    output: "770"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "770"
+    input: "extras.2.conv.7.weight"
+    input: "extras.2.conv.7.bias"
+    input: "extras.2.conv.7.running_mean"
+    input: "extras.2.conv.7.running_var"
+    output: "771"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "771"
+    input: "classification_headers.4.0.weight"
+    input: "classification_headers.4.0.bias"
+    output: "772"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 256
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "772"
+    input: "classification_headers.4.1.weight"
+    input: "classification_headers.4.1.bias"
+    input: "classification_headers.4.1.running_mean"
+    input: "classification_headers.4.1.running_var"
+    output: "773"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "773"
+    output: "774"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "774"
+    input: "classification_headers.4.3.weight"
+    input: "classification_headers.4.3.bias"
+    output: "775"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "775"
+    output: "776"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    output: "777"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "776"
+    output: "778"
+    op_type: "Shape"
+  }
+  node {
+    input: "778"
+    input: "777"
+    output: "779"
+    op_type: "Gather"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    output: "780"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "781"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "779"
+    output: "782"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "780"
+    output: "783"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "781"
+    output: "784"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "782"
+    input: "783"
+    input: "784"
+    output: "785"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    input: "776"
+    input: "785"
+    output: "786"
+    op_type: "Reshape"
+  }
+  node {
+    input: "771"
+    input: "regression_headers.4.0.weight"
+    input: "regression_headers.4.0.bias"
+    output: "787"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 256
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "787"
+    input: "regression_headers.4.1.weight"
+    input: "regression_headers.4.1.bias"
+    input: "regression_headers.4.1.running_mean"
+    input: "regression_headers.4.1.running_var"
+    output: "788"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "788"
+    output: "789"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "789"
+    input: "regression_headers.4.3.weight"
+    input: "regression_headers.4.3.bias"
+    output: "790"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "790"
+    output: "791"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    output: "792"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "791"
+    output: "793"
+    op_type: "Shape"
+  }
+  node {
+    input: "793"
+    input: "792"
+    output: "794"
+    op_type: "Gather"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    output: "795"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "796"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "794"
+    output: "797"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "795"
+    output: "798"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "796"
+    output: "799"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "797"
+    input: "798"
+    input: "799"
+    output: "800"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    input: "791"
+    input: "800"
+    output: "801"
+    op_type: "Reshape"
+  }
+  node {
+    input: "771"
+    input: "extras.3.conv.0.weight"
+    output: "802"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "802"
+    input: "extras.3.conv.1.weight"
+    input: "extras.3.conv.1.bias"
+    input: "extras.3.conv.1.running_mean"
+    input: "extras.3.conv.1.running_var"
+    output: "803"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "803"
+    output: "804"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "804"
+    input: "extras.3.conv.3.weight"
+    output: "805"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 64
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+  }
+  node {
+    input: "805"
+    input: "extras.3.conv.4.weight"
+    input: "extras.3.conv.4.bias"
+    input: "extras.3.conv.4.running_mean"
+    input: "extras.3.conv.4.running_var"
+    output: "806"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "806"
+    output: "807"
+    op_type: "Clip"
+    attribute {
+      name: "max"
+      f: 6.0
+      type: FLOAT
+    }
+    attribute {
+      name: "min"
+      f: 0.0
+      type: FLOAT
+    }
+  }
+  node {
+    input: "807"
+    input: "extras.3.conv.6.weight"
+    output: "808"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "808"
+    input: "extras.3.conv.7.weight"
+    input: "extras.3.conv.7.bias"
+    input: "extras.3.conv.7.running_mean"
+    input: "extras.3.conv.7.running_var"
+    output: "809"
+    op_type: "BatchNormalization"
+    attribute {
+      name: "epsilon"
+      f: 9.999999747378752e-06
+      type: FLOAT
+    }
+    attribute {
+      name: "momentum"
+      f: 0.8999999761581421
+      type: FLOAT
+    }
+  }
+  node {
+    input: "809"
+    input: "classification_headers.5.weight"
+    input: "classification_headers.5.bias"
+    output: "810"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "810"
+    output: "811"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    output: "812"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "811"
+    output: "813"
+    op_type: "Shape"
+  }
+  node {
+    input: "813"
+    input: "812"
+    output: "814"
+    op_type: "Gather"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    output: "815"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "816"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "814"
+    output: "817"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "815"
+    output: "818"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "816"
+    output: "819"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "817"
+    input: "818"
+    input: "819"
+    output: "820"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    input: "811"
+    input: "820"
+    output: "821"
+    op_type: "Reshape"
+  }
+  node {
+    input: "809"
+    input: "regression_headers.5.weight"
+    input: "regression_headers.5.bias"
+    output: "822"
+    op_type: "Conv"
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "822"
+    output: "823"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    output: "824"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "823"
+    output: "825"
+    op_type: "Shape"
+  }
+  node {
+    input: "825"
+    input: "824"
+    output: "826"
+    op_type: "Gather"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    output: "827"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "828"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "826"
+    output: "829"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "827"
+    output: "830"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "828"
+    output: "831"
+    op_type: "Unsqueeze"
+    attribute {
+      name: "axes"
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "829"
+    input: "830"
+    input: "831"
+    output: "832"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 0
+      type: INT
+    }
+  }
+  node {
+    input: "823"
+    input: "832"
+    output: "833"
+    op_type: "Reshape"
+  }
+  node {
+    input: "613"
+    input: "672"
+    input: "710"
+    input: "748"
+    input: "786"
+    input: "821"
+    output: "834"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "628"
+    input: "687"
+    input: "725"
+    input: "763"
+    input: "801"
+    input: "833"
+    output: "835"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "834"
+    output: "scores"
+    op_type: "Softmax"
+    attribute {
+      name: "axis"
+      i: 2
+      type: INT
+    }
+  }
+  node {
+    output: "837"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "838"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "839"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "840"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "835"
+    input: "838"
+    input: "839"
+    input: "837"
+    input: "840"
+    output: "841"
+    op_type: "Slice"
+  }
+  node {
+    output: "842"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 1
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "841"
+    input: "842"
+    output: "843"
+    op_type: "Mul"
+  }
+  node {
+    output: "844"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        dims: 3000
+        dims: 2
+        data_type: 1
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "843"
+    input: "844"
+    output: "845"
+    op_type: "Mul"
+  }
+  node {
+    output: "846"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        dims: 3000
+        dims: 2
+        data_type: 1
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "845"
+    input: "846"
+    output: "847"
+    op_type: "Add"
+  }
+  node {
+    output: "848"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "849"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "850"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "851"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "835"
+    input: "849"
+    input: "850"
+    input: "848"
+    input: "851"
+    output: "852"
+    op_type: "Slice"
+  }
+  node {
+    output: "853"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 1
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "852"
+    input: "853"
+    output: "854"
+    op_type: "Mul"
+  }
+  node {
+    input: "854"
+    output: "855"
+    op_type: "Exp"
+  }
+  node {
+    output: "856"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        dims: 3000
+        dims: 2
+        data_type: 1
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "855"
+    input: "856"
+    output: "857"
+    op_type: "Mul"
+  }
+  node {
+    input: "847"
+    input: "857"
+    output: "858"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 2
+      type: INT
+    }
+  }
+  node {
+    output: "859"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "860"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "861"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "862"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "858"
+    input: "860"
+    input: "861"
+    input: "859"
+    input: "862"
+    output: "863"
+    op_type: "Slice"
+  }
+  node {
+    output: "864"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "865"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "866"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "867"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "858"
+    input: "865"
+    input: "866"
+    input: "864"
+    input: "867"
+    output: "868"
+    op_type: "Slice"
+  }
+  node {
+    output: "869"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 1
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "868"
+    input: "869"
+    output: "870"
+    op_type: "Div"
+  }
+  node {
+    input: "863"
+    input: "870"
+    output: "871"
+    op_type: "Sub"
+  }
+  node {
+    output: "872"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "873"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "874"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "875"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "858"
+    input: "873"
+    input: "874"
+    input: "872"
+    input: "875"
+    output: "876"
+    op_type: "Slice"
+  }
+  node {
+    output: "877"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "878"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "879"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    output: "880"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        dims: 1
+        data_type: 7
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "858"
+    input: "878"
+    input: "879"
+    input: "877"
+    input: "880"
+    output: "881"
+    op_type: "Slice"
+  }
+  node {
+    output: "882"
+    op_type: "Constant"
+    attribute {
+      name: "value"
+      t {
+        data_type: 1
+      }
+      type: TENSOR
+    }
+  }
+  node {
+    input: "881"
+    input: "882"
+    output: "883"
+    op_type: "Div"
+  }
+  node {
+    input: "876"
+    input: "883"
+    output: "884"
+    op_type: "Add"
+  }
+  node {
+    input: "871"
+    input: "884"
+    output: "boxes"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 2
+      type: INT
+    }
+  }
+  initializer {
+      dims: 32
+      dims: 3
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.0.0.weight"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.0.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.0.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.0.1.running_mean"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.0.1.running_var"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.0.1.weight"
+  }
+  initializer {
+      dims: 32
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.1.conv.0.weight"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.1.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.1.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.1.conv.1.running_mean"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.1.conv.1.running_var"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.1.conv.1.weight"
+  }
+  initializer {
+      dims: 16
+      dims: 32
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.1.conv.3.weight"
+  }
+  initializer {
+      dims: 16
+      data_type: 1
+      name: "base_net.1.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.1.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 16
+      data_type: 1
+      name: "base_net.1.conv.4.running_mean"
+  }
+  initializer {
+      dims: 16
+      data_type: 1
+      name: "base_net.1.conv.4.running_var"
+  }
+  initializer {
+      dims: 16
+      data_type: 1
+      name: "base_net.1.conv.4.weight"
+  }
+  initializer {
+      dims: 384
+      dims: 64
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.10.conv.0.weight"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.10.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.10.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.10.conv.1.running_mean"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.10.conv.1.running_var"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.10.conv.1.weight"
+  }
+  initializer {
+      dims: 384
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.10.conv.3.weight"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.10.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.10.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.10.conv.4.running_mean"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.10.conv.4.running_var"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.10.conv.4.weight"
+  }
+  initializer {
+      dims: 64
+      dims: 384
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.10.conv.6.weight"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.10.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.10.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.10.conv.7.running_mean"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.10.conv.7.running_var"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.10.conv.7.weight"
+  }
+  initializer {
+      dims: 384
+      dims: 64
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.11.conv.0.weight"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.11.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.11.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.11.conv.1.running_mean"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.11.conv.1.running_var"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.11.conv.1.weight"
+  }
+  initializer {
+      dims: 384
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.11.conv.3.weight"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.11.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.11.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.11.conv.4.running_mean"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.11.conv.4.running_var"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.11.conv.4.weight"
+  }
+  initializer {
+      dims: 96
+      dims: 384
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.11.conv.6.weight"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.11.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.11.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.11.conv.7.running_mean"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.11.conv.7.running_var"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.11.conv.7.weight"
+  }
+  initializer {
+      dims: 576
+      dims: 96
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.12.conv.0.weight"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.12.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.12.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.12.conv.1.running_mean"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.12.conv.1.running_var"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.12.conv.1.weight"
+  }
+  initializer {
+      dims: 576
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.12.conv.3.weight"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.12.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.12.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.12.conv.4.running_mean"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.12.conv.4.running_var"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.12.conv.4.weight"
+  }
+  initializer {
+      dims: 96
+      dims: 576
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.12.conv.6.weight"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.12.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.12.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.12.conv.7.running_mean"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.12.conv.7.running_var"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.12.conv.7.weight"
+  }
+  initializer {
+      dims: 576
+      dims: 96
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.13.conv.0.weight"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.13.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.13.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.13.conv.1.running_mean"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.13.conv.1.running_var"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.13.conv.1.weight"
+  }
+  initializer {
+      dims: 576
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.13.conv.3.weight"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.13.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.13.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.13.conv.4.running_mean"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.13.conv.4.running_var"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.13.conv.4.weight"
+  }
+  initializer {
+      dims: 96
+      dims: 576
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.13.conv.6.weight"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.13.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.13.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.13.conv.7.running_mean"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.13.conv.7.running_var"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.13.conv.7.weight"
+  }
+  initializer {
+      dims: 576
+      dims: 96
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.14.conv.0.weight"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.14.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.14.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.14.conv.1.running_mean"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.14.conv.1.running_var"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.14.conv.1.weight"
+  }
+  initializer {
+      dims: 576
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.14.conv.3.weight"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.14.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.14.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.14.conv.4.running_mean"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.14.conv.4.running_var"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "base_net.14.conv.4.weight"
+  }
+  initializer {
+      dims: 160
+      dims: 576
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.14.conv.6.weight"
+  }
+  initializer {
+      dims: 160
+      data_type: 1
+      name: "base_net.14.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.14.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 160
+      data_type: 1
+      name: "base_net.14.conv.7.running_mean"
+  }
+  initializer {
+      dims: 160
+      data_type: 1
+      name: "base_net.14.conv.7.running_var"
+  }
+  initializer {
+      dims: 160
+      data_type: 1
+      name: "base_net.14.conv.7.weight"
+  }
+  initializer {
+      dims: 960
+      dims: 160
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.15.conv.0.weight"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.15.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.15.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.15.conv.1.running_mean"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.15.conv.1.running_var"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.15.conv.1.weight"
+  }
+  initializer {
+      dims: 960
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.15.conv.3.weight"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.15.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.15.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.15.conv.4.running_mean"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.15.conv.4.running_var"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.15.conv.4.weight"
+  }
+  initializer {
+      dims: 160
+      dims: 960
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.15.conv.6.weight"
+  }
+  initializer {
+      dims: 160
+      data_type: 1
+      name: "base_net.15.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.15.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 160
+      data_type: 1
+      name: "base_net.15.conv.7.running_mean"
+  }
+  initializer {
+      dims: 160
+      data_type: 1
+      name: "base_net.15.conv.7.running_var"
+  }
+  initializer {
+      dims: 160
+      data_type: 1
+      name: "base_net.15.conv.7.weight"
+  }
+  initializer {
+      dims: 960
+      dims: 160
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.16.conv.0.weight"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.16.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.16.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.16.conv.1.running_mean"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.16.conv.1.running_var"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.16.conv.1.weight"
+  }
+  initializer {
+      dims: 960
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.16.conv.3.weight"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.16.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.16.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.16.conv.4.running_mean"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.16.conv.4.running_var"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.16.conv.4.weight"
+  }
+  initializer {
+      dims: 160
+      dims: 960
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.16.conv.6.weight"
+  }
+  initializer {
+      dims: 160
+      data_type: 1
+      name: "base_net.16.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.16.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 160
+      data_type: 1
+      name: "base_net.16.conv.7.running_mean"
+  }
+  initializer {
+      dims: 160
+      data_type: 1
+      name: "base_net.16.conv.7.running_var"
+  }
+  initializer {
+      dims: 160
+      data_type: 1
+      name: "base_net.16.conv.7.weight"
+  }
+  initializer {
+      dims: 960
+      dims: 160
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.17.conv.0.weight"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.17.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.17.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.17.conv.1.running_mean"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.17.conv.1.running_var"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.17.conv.1.weight"
+  }
+  initializer {
+      dims: 960
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.17.conv.3.weight"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.17.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.17.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.17.conv.4.running_mean"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.17.conv.4.running_var"
+  }
+  initializer {
+      dims: 960
+      data_type: 1
+      name: "base_net.17.conv.4.weight"
+  }
+  initializer {
+      dims: 320
+      dims: 960
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.17.conv.6.weight"
+  }
+  initializer {
+      dims: 320
+      data_type: 1
+      name: "base_net.17.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.17.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 320
+      data_type: 1
+      name: "base_net.17.conv.7.running_mean"
+  }
+  initializer {
+      dims: 320
+      data_type: 1
+      name: "base_net.17.conv.7.running_var"
+  }
+  initializer {
+      dims: 320
+      data_type: 1
+      name: "base_net.17.conv.7.weight"
+  }
+  initializer {
+      dims: 1280
+      dims: 320
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.18.0.weight"
+  }
+  initializer {
+      dims: 1280
+      data_type: 1
+      name: "base_net.18.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.18.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 1280
+      data_type: 1
+      name: "base_net.18.1.running_mean"
+  }
+  initializer {
+      dims: 1280
+      data_type: 1
+      name: "base_net.18.1.running_var"
+  }
+  initializer {
+      dims: 1280
+      data_type: 1
+      name: "base_net.18.1.weight"
+  }
+  initializer {
+      dims: 96
+      dims: 16
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.2.conv.0.weight"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.2.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.2.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.2.conv.1.running_mean"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.2.conv.1.running_var"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.2.conv.1.weight"
+  }
+  initializer {
+      dims: 96
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.2.conv.3.weight"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.2.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.2.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.2.conv.4.running_mean"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.2.conv.4.running_var"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "base_net.2.conv.4.weight"
+  }
+  initializer {
+      dims: 24
+      dims: 96
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.2.conv.6.weight"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "base_net.2.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.2.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "base_net.2.conv.7.running_mean"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "base_net.2.conv.7.running_var"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "base_net.2.conv.7.weight"
+  }
+  initializer {
+      dims: 144
+      dims: 24
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.3.conv.0.weight"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.3.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.3.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.3.conv.1.running_mean"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.3.conv.1.running_var"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.3.conv.1.weight"
+  }
+  initializer {
+      dims: 144
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.3.conv.3.weight"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.3.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.3.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.3.conv.4.running_mean"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.3.conv.4.running_var"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.3.conv.4.weight"
+  }
+  initializer {
+      dims: 24
+      dims: 144
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.3.conv.6.weight"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "base_net.3.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.3.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "base_net.3.conv.7.running_mean"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "base_net.3.conv.7.running_var"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "base_net.3.conv.7.weight"
+  }
+  initializer {
+      dims: 144
+      dims: 24
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.4.conv.0.weight"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.4.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.4.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.4.conv.1.running_mean"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.4.conv.1.running_var"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.4.conv.1.weight"
+  }
+  initializer {
+      dims: 144
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.4.conv.3.weight"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.4.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.4.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.4.conv.4.running_mean"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.4.conv.4.running_var"
+  }
+  initializer {
+      dims: 144
+      data_type: 1
+      name: "base_net.4.conv.4.weight"
+  }
+  initializer {
+      dims: 32
+      dims: 144
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.4.conv.6.weight"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.4.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.4.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.4.conv.7.running_mean"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.4.conv.7.running_var"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.4.conv.7.weight"
+  }
+  initializer {
+      dims: 192
+      dims: 32
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.5.conv.0.weight"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.5.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.5.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.5.conv.1.running_mean"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.5.conv.1.running_var"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.5.conv.1.weight"
+  }
+  initializer {
+      dims: 192
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.5.conv.3.weight"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.5.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.5.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.5.conv.4.running_mean"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.5.conv.4.running_var"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.5.conv.4.weight"
+  }
+  initializer {
+      dims: 32
+      dims: 192
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.5.conv.6.weight"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.5.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.5.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.5.conv.7.running_mean"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.5.conv.7.running_var"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.5.conv.7.weight"
+  }
+  initializer {
+      dims: 192
+      dims: 32
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.6.conv.0.weight"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.6.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.6.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.6.conv.1.running_mean"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.6.conv.1.running_var"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.6.conv.1.weight"
+  }
+  initializer {
+      dims: 192
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.6.conv.3.weight"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.6.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.6.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.6.conv.4.running_mean"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.6.conv.4.running_var"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.6.conv.4.weight"
+  }
+  initializer {
+      dims: 32
+      dims: 192
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.6.conv.6.weight"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.6.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.6.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.6.conv.7.running_mean"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.6.conv.7.running_var"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "base_net.6.conv.7.weight"
+  }
+  initializer {
+      dims: 192
+      dims: 32
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.7.conv.0.weight"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.7.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.7.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.7.conv.1.running_mean"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.7.conv.1.running_var"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.7.conv.1.weight"
+  }
+  initializer {
+      dims: 192
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.7.conv.3.weight"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.7.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.7.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.7.conv.4.running_mean"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.7.conv.4.running_var"
+  }
+  initializer {
+      dims: 192
+      data_type: 1
+      name: "base_net.7.conv.4.weight"
+  }
+  initializer {
+      dims: 64
+      dims: 192
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.7.conv.6.weight"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.7.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.7.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.7.conv.7.running_mean"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.7.conv.7.running_var"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.7.conv.7.weight"
+  }
+  initializer {
+      dims: 384
+      dims: 64
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.8.conv.0.weight"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.8.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.8.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.8.conv.1.running_mean"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.8.conv.1.running_var"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.8.conv.1.weight"
+  }
+  initializer {
+      dims: 384
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.8.conv.3.weight"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.8.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.8.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.8.conv.4.running_mean"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.8.conv.4.running_var"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.8.conv.4.weight"
+  }
+  initializer {
+      dims: 64
+      dims: 384
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.8.conv.6.weight"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.8.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.8.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.8.conv.7.running_mean"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.8.conv.7.running_var"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.8.conv.7.weight"
+  }
+  initializer {
+      dims: 384
+      dims: 64
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.9.conv.0.weight"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.9.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.9.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.9.conv.1.running_mean"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.9.conv.1.running_var"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.9.conv.1.weight"
+  }
+  initializer {
+      dims: 384
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "base_net.9.conv.3.weight"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.9.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.9.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.9.conv.4.running_mean"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.9.conv.4.running_var"
+  }
+  initializer {
+      dims: 384
+      data_type: 1
+      name: "base_net.9.conv.4.weight"
+  }
+  initializer {
+      dims: 64
+      dims: 384
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "base_net.9.conv.6.weight"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.9.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "base_net.9.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.9.conv.7.running_mean"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.9.conv.7.running_var"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "base_net.9.conv.7.weight"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "classification_headers.0.0.bias"
+  }
+  initializer {
+      dims: 576
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "classification_headers.0.0.weight"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "classification_headers.0.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "classification_headers.0.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "classification_headers.0.1.running_mean"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "classification_headers.0.1.running_var"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "classification_headers.0.1.weight"
+  }
+  initializer {
+      dims: 126
+      data_type: 1
+      name: "classification_headers.0.3.bias"
+  }
+  initializer {
+      dims: 126
+      dims: 576
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "classification_headers.0.3.weight"
+  }
+  initializer {
+      dims: 1280
+      data_type: 1
+      name: "classification_headers.1.0.bias"
+  }
+  initializer {
+      dims: 1280
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "classification_headers.1.0.weight"
+  }
+  initializer {
+      dims: 1280
+      data_type: 1
+      name: "classification_headers.1.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "classification_headers.1.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 1280
+      data_type: 1
+      name: "classification_headers.1.1.running_mean"
+  }
+  initializer {
+      dims: 1280
+      data_type: 1
+      name: "classification_headers.1.1.running_var"
+  }
+  initializer {
+      dims: 1280
+      data_type: 1
+      name: "classification_headers.1.1.weight"
+  }
+  initializer {
+      dims: 126
+      data_type: 1
+      name: "classification_headers.1.3.bias"
+  }
+  initializer {
+      dims: 126
+      dims: 1280
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "classification_headers.1.3.weight"
+  }
+  initializer {
+      dims: 512
+      data_type: 1
+      name: "classification_headers.2.0.bias"
+  }
+  initializer {
+      dims: 512
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "classification_headers.2.0.weight"
+  }
+  initializer {
+      dims: 512
+      data_type: 1
+      name: "classification_headers.2.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "classification_headers.2.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 512
+      data_type: 1
+      name: "classification_headers.2.1.running_mean"
+  }
+  initializer {
+      dims: 512
+      data_type: 1
+      name: "classification_headers.2.1.running_var"
+  }
+  initializer {
+      dims: 512
+      data_type: 1
+      name: "classification_headers.2.1.weight"
+  }
+  initializer {
+      dims: 126
+      data_type: 1
+      name: "classification_headers.2.3.bias"
+  }
+  initializer {
+      dims: 126
+      dims: 512
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "classification_headers.2.3.weight"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "classification_headers.3.0.bias"
+  }
+  initializer {
+      dims: 256
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "classification_headers.3.0.weight"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "classification_headers.3.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "classification_headers.3.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "classification_headers.3.1.running_mean"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "classification_headers.3.1.running_var"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "classification_headers.3.1.weight"
+  }
+  initializer {
+      dims: 126
+      data_type: 1
+      name: "classification_headers.3.3.bias"
+  }
+  initializer {
+      dims: 126
+      dims: 256
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "classification_headers.3.3.weight"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "classification_headers.4.0.bias"
+  }
+  initializer {
+      dims: 256
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "classification_headers.4.0.weight"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "classification_headers.4.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "classification_headers.4.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "classification_headers.4.1.running_mean"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "classification_headers.4.1.running_var"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "classification_headers.4.1.weight"
+  }
+  initializer {
+      dims: 126
+      data_type: 1
+      name: "classification_headers.4.3.bias"
+  }
+  initializer {
+      dims: 126
+      dims: 256
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "classification_headers.4.3.weight"
+  }
+  initializer {
+      dims: 126
+      data_type: 1
+      name: "classification_headers.5.bias"
+  }
+  initializer {
+      dims: 126
+      dims: 64
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "classification_headers.5.weight"
+  }
+  initializer {
+      dims: 256
+      dims: 1280
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "extras.0.conv.0.weight"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.0.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "extras.0.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.0.conv.1.running_mean"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.0.conv.1.running_var"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.0.conv.1.weight"
+  }
+  initializer {
+      dims: 256
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "extras.0.conv.3.weight"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.0.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "extras.0.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.0.conv.4.running_mean"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.0.conv.4.running_var"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.0.conv.4.weight"
+  }
+  initializer {
+      dims: 512
+      dims: 256
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "extras.0.conv.6.weight"
+  }
+  initializer {
+      dims: 512
+      data_type: 1
+      name: "extras.0.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "extras.0.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 512
+      data_type: 1
+      name: "extras.0.conv.7.running_mean"
+  }
+  initializer {
+      dims: 512
+      data_type: 1
+      name: "extras.0.conv.7.running_var"
+  }
+  initializer {
+      dims: 512
+      data_type: 1
+      name: "extras.0.conv.7.weight"
+  }
+  initializer {
+      dims: 128
+      dims: 512
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "extras.1.conv.0.weight"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.1.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "extras.1.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.1.conv.1.running_mean"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.1.conv.1.running_var"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.1.conv.1.weight"
+  }
+  initializer {
+      dims: 128
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "extras.1.conv.3.weight"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.1.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "extras.1.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.1.conv.4.running_mean"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.1.conv.4.running_var"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.1.conv.4.weight"
+  }
+  initializer {
+      dims: 256
+      dims: 128
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "extras.1.conv.6.weight"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.1.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "extras.1.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.1.conv.7.running_mean"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.1.conv.7.running_var"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.1.conv.7.weight"
+  }
+  initializer {
+      dims: 128
+      dims: 256
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "extras.2.conv.0.weight"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.2.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "extras.2.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.2.conv.1.running_mean"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.2.conv.1.running_var"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.2.conv.1.weight"
+  }
+  initializer {
+      dims: 128
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "extras.2.conv.3.weight"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.2.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "extras.2.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.2.conv.4.running_mean"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.2.conv.4.running_var"
+  }
+  initializer {
+      dims: 128
+      data_type: 1
+      name: "extras.2.conv.4.weight"
+  }
+  initializer {
+      dims: 256
+      dims: 128
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "extras.2.conv.6.weight"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.2.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "extras.2.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.2.conv.7.running_mean"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.2.conv.7.running_var"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "extras.2.conv.7.weight"
+  }
+  initializer {
+      dims: 64
+      dims: 256
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "extras.3.conv.0.weight"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "extras.3.conv.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "extras.3.conv.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "extras.3.conv.1.running_mean"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "extras.3.conv.1.running_var"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "extras.3.conv.1.weight"
+  }
+  initializer {
+      dims: 64
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "extras.3.conv.3.weight"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "extras.3.conv.4.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "extras.3.conv.4.num_batches_tracked"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "extras.3.conv.4.running_mean"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "extras.3.conv.4.running_var"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "extras.3.conv.4.weight"
+  }
+  initializer {
+      dims: 64
+      dims: 64
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "extras.3.conv.6.weight"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "extras.3.conv.7.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "extras.3.conv.7.num_batches_tracked"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "extras.3.conv.7.running_mean"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "extras.3.conv.7.running_var"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "extras.3.conv.7.weight"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "regression_headers.0.0.bias"
+  }
+  initializer {
+      dims: 576
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "regression_headers.0.0.weight"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "regression_headers.0.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "regression_headers.0.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "regression_headers.0.1.running_mean"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "regression_headers.0.1.running_var"
+  }
+  initializer {
+      dims: 576
+      data_type: 1
+      name: "regression_headers.0.1.weight"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "regression_headers.0.3.bias"
+  }
+  initializer {
+      dims: 24
+      dims: 576
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "regression_headers.0.3.weight"
+  }
+  initializer {
+      dims: 1280
+      data_type: 1
+      name: "regression_headers.1.0.bias"
+  }
+  initializer {
+      dims: 1280
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "regression_headers.1.0.weight"
+  }
+  initializer {
+      dims: 1280
+      data_type: 1
+      name: "regression_headers.1.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "regression_headers.1.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 1280
+      data_type: 1
+      name: "regression_headers.1.1.running_mean"
+  }
+  initializer {
+      dims: 1280
+      data_type: 1
+      name: "regression_headers.1.1.running_var"
+  }
+  initializer {
+      dims: 1280
+      data_type: 1
+      name: "regression_headers.1.1.weight"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "regression_headers.1.3.bias"
+  }
+  initializer {
+      dims: 24
+      dims: 1280
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "regression_headers.1.3.weight"
+  }
+  initializer {
+      dims: 512
+      data_type: 1
+      name: "regression_headers.2.0.bias"
+  }
+  initializer {
+      dims: 512
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "regression_headers.2.0.weight"
+  }
+  initializer {
+      dims: 512
+      data_type: 1
+      name: "regression_headers.2.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "regression_headers.2.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 512
+      data_type: 1
+      name: "regression_headers.2.1.running_mean"
+  }
+  initializer {
+      dims: 512
+      data_type: 1
+      name: "regression_headers.2.1.running_var"
+  }
+  initializer {
+      dims: 512
+      data_type: 1
+      name: "regression_headers.2.1.weight"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "regression_headers.2.3.bias"
+  }
+  initializer {
+      dims: 24
+      dims: 512
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "regression_headers.2.3.weight"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "regression_headers.3.0.bias"
+  }
+  initializer {
+      dims: 256
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "regression_headers.3.0.weight"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "regression_headers.3.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "regression_headers.3.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "regression_headers.3.1.running_mean"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "regression_headers.3.1.running_var"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "regression_headers.3.1.weight"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "regression_headers.3.3.bias"
+  }
+  initializer {
+      dims: 24
+      dims: 256
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "regression_headers.3.3.weight"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "regression_headers.4.0.bias"
+  }
+  initializer {
+      dims: 256
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "regression_headers.4.0.weight"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "regression_headers.4.1.bias"
+  }
+  initializer {
+      data_type: 7
+      name: "regression_headers.4.1.num_batches_tracked"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "regression_headers.4.1.running_mean"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "regression_headers.4.1.running_var"
+  }
+  initializer {
+      dims: 256
+      data_type: 1
+      name: "regression_headers.4.1.weight"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "regression_headers.4.3.bias"
+  }
+  initializer {
+      dims: 24
+      dims: 256
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "regression_headers.4.3.weight"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "regression_headers.5.bias"
+  }
+  initializer {
+      dims: 24
+      dims: 64
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "regression_headers.5.weight"
+  }
+  input {
+    name: "input.1"
+    type {
+      tensor_type {
+        elem_type: 1
+        shape {
+          dim {
+            dim_value: 1
+          }
+          dim {
+            dim_value: 3
+          }
+          dim {
+            dim_value: 300
+          }
+          dim {
+            dim_value: 300
+          }
+        }
+      }
+    }
+  }
+  output {
+    name: "scores"
+    type {
+      tensor_type {
+        elem_type: 1
+        shape {
+          dim {
+            dim_value: 1
+          }
+          dim {
+            dim_value: 3000
+          }
+          dim {
+            dim_value: 21
+          }
+        }
+      }
+    }
+  }
+  output {
+    name: "boxes"
+    type {
+      tensor_type {
+        elem_type: 1
+        shape {
+          dim {
+            dim_value: 1
+          }
+          dim {
+            dim_value: 3000
+          }
+          dim {
+            dim_value: 4
+          }
+        }
+      }
+    }
+  }
+}
+opset_import {
+  version: 10
+}
