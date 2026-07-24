@@ -1,0 +1,3 @@
+[submodule "ailia-js"]
+	path = ailia-js
+	url = https://github.com/ailia-ai/ailia-js.git
