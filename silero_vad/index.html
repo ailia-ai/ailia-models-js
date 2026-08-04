@@ -153,11 +153,23 @@
                     setStatus(`Failed to load the capture worklet: ${error.message}`, 'error');
                     return;
                 }
+                const track = stream.getAudioTracks()[0];
+                console.log('Microphone track:', track && track.label, {
+                    enabled: track && track.enabled,
+                    muted: track && track.muted,
+                    readyState: track && track.readyState,
+                    settings: track && track.getSettings()
+                });
+
                 const source = context.createMediaStreamSource(stream);
                 const capture = new AudioWorkletNode(context, 'microphone-capture', {
                     numberOfInputs: 1,
                     numberOfOutputs: 1,
-                    outputChannelCount: [1]
+                    outputChannelCount: [1],
+                    // Have the graph downmix a stereo device to mono for us
+                    channelCount: 1,
+                    channelCountMode: 'explicit',
+                    channelInterpretation: 'speakers'
                 });
 
                 const captured = new Float32Array(SAMPLE_RATE * MAX_RECORDING_SECONDS);
@@ -193,8 +205,45 @@
                 drawLive();
                 redraw = setInterval(drawLive, LIVE_REDRAW_MS);
 
+                // Diagnostics: report the first audio seen, then a summary each
+                // second, so a silent capture can be traced to a stage
+                let blocksSeen = 0;
+                let nativePeak = 0;
+                let resampledPeak = 0;
+                let sawAudio = false;
+                let lastProbability = 0;
+                const startedAt = performance.now();
+                let reportedAt = startedAt;
+
                 capture.port.onmessage = event => {
-                    const resampled = resampler.process(event.data);
+                    const message = event.data;
+
+                    if (message.type === 'started') {
+                        console.log('Worklet running:', message);
+                        return;
+                    }
+                    if (message.type === 'noInput') {
+                        console.warn(`Worklet has had no input channel for ${message.calls} quanta`);
+                        return;
+                    }
+
+                    blocksSeen++;
+                    if (message.peak > nativePeak) {
+                        nativePeak = message.peak;
+                    }
+                    if (!sawAudio && message.peak > 0) {
+                        sawAudio = true;
+                        console.log(`Audio detected: peak ${message.peak.toFixed(5)} after ` +
+                            `${blocksSeen} block(s), ${((performance.now() - startedAt) / 1000).toFixed(2)}s in`);
+                    }
+
+                    const resampled = resampler.process(message.samples);
+                    for (let i = 0; i < resampled.length; i++) {
+                        const magnitude = Math.abs(resampled[i]);
+                        if (magnitude > resampledPeak) {
+                            resampledPeak = magnitude;
+                        }
+                    }
 
                     const room = captured.length - capturedLength;
                     if (room <= 0) {
@@ -213,6 +262,7 @@
                     let offset = 0;
                     while (offset + WINDOW_SAMPLES <= merged.length) {
                         const probability = vad.process(merged.subarray(offset, offset + WINDOW_SAMPLES));
+                        lastProbability = probability;
                         speaking = probability >= 0.5;
                         windowCount++;
 
@@ -229,6 +279,22 @@
                         offset += WINDOW_SAMPLES;
                     }
                     pending = merged.slice(offset);
+
+                    const now = performance.now();
+                    if (now - reportedAt >= 1000) {
+                        reportedAt = now;
+                        console.log(`${((now - startedAt) / 1000).toFixed(1)}s: ${blocksSeen} blocks, ` +
+                            `peak ${nativePeak.toFixed(5)} at ${captureRate} Hz / ` +
+                            `${resampledPeak.toFixed(5)} at ${SAMPLE_RATE} Hz, ` +
+                            `${capturedLength} samples, ${windowCount} windows, ` +
+                            `last probability ${lastProbability.toFixed(3)}`);
+                        if (!sawAudio) {
+                            console.warn('Still nothing but zeros from the microphone. ' +
+                                'Check that the right input device is selected and not muted.');
+                        }
+                        nativePeak = 0;
+                        resampledPeak = 0;
+                    }
                 };
 
                 source.connect(capture);
@@ -261,6 +327,13 @@
                     setStatus(`Stopped. Recorded ${(capturedLength / SAMPLE_RATE).toFixed(1)}s, ` +
                         `${segments.length} speech segment${segments.length === 1 ? '' : 's'}`);
                 };
+
+                setTimeout(() => {
+                    if (stopCapture && blocksSeen === 0) {
+                        console.warn('No audio blocks have arrived from the worklet at all. ' +
+                            'The node may not be pulled by the graph, or the track may be dead.');
+                    }
+                }, 1500);
 
                 micButton.innerText = 'Stop recording';
             }
