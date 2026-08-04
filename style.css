@@ -1,0 +1,279 @@
+/* ailia.js Demo - shared stylesheet */
+
+:root {
+    --bg: #ffffff;
+    --surface: #fbfcfd;
+    --border: #e4e7ec;
+    --text: #1c2024;
+    --text-muted: #5c6470;
+    --accent: #0b6bcb;
+    --accent-hover: #095aab;
+    --accent-soft: #f2f7fd;
+    --error: #c62828;
+    --radius: 8px;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0 1.5rem 4rem;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+        "Hiragino Sans", "Noto Sans JP", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+/* Layout ------------------------------------------------------------------ */
+
+.page {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+/* Demo pages put the input and the result side by side, so they need more room */
+.page--wide {
+    max-width: 1080px;
+}
+
+.site-header {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+}
+
+.site-header h1 {
+    margin: 0;
+    font-size: 2.25rem;
+    letter-spacing: -0.02em;
+}
+
+.tagline {
+    margin: 0.5rem 0 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+}
+
+section {
+    margin-bottom: 2.5rem;
+}
+
+section > h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.15rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+p {
+    margin: 0 0 1rem;
+}
+
+/* Links ------------------------------------------------------------------- */
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Model cards ------------------------------------------------------------- */
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+}
+
+.card {
+    display: block;
+    padding: 1rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: inherit;
+}
+
+.card:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    text-decoration: none;
+}
+
+.card-title {
+    display: block;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.card-desc {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* Plain link lists -------------------------------------------------------- */
+
+.link-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.link-list li {
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.link-list li:last-child {
+    border-bottom: none;
+}
+
+/* Notes ------------------------------------------------------------------- */
+
+.note {
+    padding: 1rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+}
+
+.note p:last-child {
+    margin-bottom: 0;
+}
+
+.site-footer {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+/* Demo pages: status line ------------------------------------------------- */
+
+.status-container {
+    display: inline-block;
+    margin: 0 0 1.25rem;
+    padding: 0.35rem 0.8rem;
+    background: var(--accent-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.status-container.error {
+    background: #fdf1f1;
+    border-color: #f2c9c9;
+    color: var(--error);
+    font-weight: 600;
+}
+
+/* Demo pages: controls --------------------------------------------------- */
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+}
+
+button {
+    padding: 0.55rem 1.1rem;
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+button:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+/* Buttons stay hidden until the model files have been loaded */
+.singleImageButton,
+.videoStreamButton {
+    visibility: hidden;
+}
+
+.model-loaded .singleImageButton,
+.model-loaded .videoStreamButton {
+    visibility: visible;
+}
+
+/* Demo pages: input / output panels -------------------------------------- */
+
+.io-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 1rem;
+    align-items: start;
+}
+
+.io-container > * {
+    min-width: 0;
+    padding: 1rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.io-container h2 {
+    margin: 0 0 0.75rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.io-container img,
+.io-container video,
+.io-container canvas {
+    max-width: 100%;
+    max-height: 500px;
+    border-radius: 4px;
+}
+
+.sample-image {
+    cursor: pointer;
+}
+
+/* The overlay canvas is absolutely positioned on top of the result canvas */
+.result-container {
+    position: relative;
+}
+
+.result-json {
+    margin: 0.75rem 0 0;
+    max-height: 260px;
+    overflow: auto;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    white-space: pre;
+}
+
+.result-json:empty {
+    display: none;
+}

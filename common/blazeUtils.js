@@ -1,16 +1,17 @@
-import { CONSTANTS } from './constants.js';
-
 export function sigmoid(x) {
     return 1.0 / (1.0 + Math.exp(-x));
 }
 
+// A box is described by 4 numbers (centre x, centre y, width, height); the
+// keypoints follow them in the same tensor.
+const BOX_PARAMETER_COUNT = 4;
+
 export function generateBoxDecoder(inputScale, tensorCount, tensorSize, featureCount, anchors) {
     /**
-     * @param {Float32Array} heap
-     * @param {number} predictionsRef
+     * @param {Float32Array} predictions the raw regressor output blob
      * @returns {DetectionBox[]}
      */
-    return (heap, predictionsRef) => {
+    return (predictions) => {
         const boxes = new Array(tensorCount);
 
         const xScale = inputScale;
@@ -19,7 +20,7 @@ export function generateBoxDecoder(inputScale, tensorCount, tensorSize, featureC
         const hScale = inputScale;
 
         function getFloat(tI, cI) {
-            return heap[predictionsRef + tI * tensorSize + cI];
+            return predictions[tI * tensorSize + cI];
         }
 
         for (let tI = 0; tI < tensorCount; tI++) {
@@ -38,7 +39,7 @@ export function generateBoxDecoder(inputScale, tensorCount, tensorSize, featureC
             };
 
             for (let featureIndex = 0; featureIndex < featureCount; featureIndex++) {
-                const featureOffset = CONSTANTS.SIZE_OF_FLOAT + featureIndex * 2;
+                const featureOffset = BOX_PARAMETER_COUNT + featureIndex * 2;
 
                 box.features.push({
                     x: getFloat(tI, featureOffset) / xScale * anchors[tI][2] + anchors[tI][0],

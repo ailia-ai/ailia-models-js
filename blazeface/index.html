@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blaze Face | ailia.js Demo</title>
+    <link rel="stylesheet" href="../style.css" />
+
+    <script type='module'>
+        import { Ailia } from '../ailia-js/ailia.js';
+        import { computeBlazeface, plotFaces } from './blazefaceUtils.js';
+        import { delay, setStatus, changeSampleImage, createAiliaWithModel, setupSampleImageRunButton, setupVideoStreamRunButton } from '../common/demoUtils.js';
+
+        // Only used for the bundled sample image, not for the camera stream
+        const SAMPLE_IMAGE_SCORE_THRESHOLD = 0.85;
+
+        if (document.readyState === 'complete') { // Safari
+            onload();
+        }else{ // Chrome or Safari
+            window.addEventListener('load', onload);
+        }
+        
+        async function onload(){
+            const imageContainerElement = document.querySelector('.sample-image');
+            imageContainerElement.addEventListener('click', changeSampleImage.bind(null, imageContainerElement));
+
+            await Ailia.initialize();
+            const ailiaBlazeface = await createAiliaWithModel('blazeface');
+
+            if (ailiaBlazeface === null) {
+                setStatus('Could not load the model files from the backend', 'error');
+                return;
+            }
+
+            document.body.classList.add('model-loaded');
+            setStatus('Model ready to run');
+
+            const myresult = document.querySelector('.result-json');
+
+            async function processImage(imageElement, outputOverlayCanvas, scoreThreshold) {
+                try {
+                    await delay(1);
+                    var startTime = new Date();
+                    const faces = computeBlazeface(ailiaBlazeface, imageElement, scoreThreshold);
+                    var endTime = new Date();
+                    setStatus('The model has finished running ' + (endTime.getTime() - startTime.getTime()) + 'ms');
+
+                    plotFaces(outputOverlayCanvas, faces);
+                    if (faces && faces.length > 0) {
+                        myresult.innerText = JSON.stringify(faces, null, 4);
+                    } else {
+                        myresult.innerText = '';
+                    }
+                } catch (e) {
+                    const message = ailiaBlazeface.getErrorDetail(e);
+                    console.log(e);
+                    console.error(message);
+                    setStatus(`Error while running the model: ${message}`, 'error');
+                }
+            }
+
+            // The ferris wheel in sample-image.jpg is a false positive at 0.821, which is
+            // above one of the two anchors that make up the real face (0.806), so the
+            // default 0.75 cannot separate them. The still-image demo therefore runs at a
+            // stricter threshold; the camera keeps the default so small faces still match.
+            setupSampleImageRunButton((imageElement, outputOverlayCanvas) =>
+                processImage(imageElement, outputOverlayCanvas, SAMPLE_IMAGE_SCORE_THRESHOLD));
+            setupVideoStreamRunButton(processImage);
+        }
+    </script>
+</head>
+
+<body>
+    <div class="page page--wide">
+
+        <header class="site-header">
+            <a class="back-link" href="../">&larr; ailia.js Demo</a>
+            <h1>Blaze Face</h1>
+            <p class="tagline">Face detection running in your browser with WebAssembly.</p>
+        </header>
+
+        <p class="status-container">Checking the model files</p>
+
+        <div class="controls">
+            <button class="singleImageButton">Run with sample image</button>
+            <button class="videoStreamButton">Run with camera</button>
+        </div>
+
+        <div class="io-container">
+            <div class="input-container">
+                <h2>Sample image (click to change)</h2>
+                <img class="sample-image" src='../images/sample-image.jpg'></img>
+            </div>
+            <div class="output-container">
+                <h2>Result</h2>
+                <div class="result-container"></div>
+                <p class="result-json"></p>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

@@ -1,6 +1,5 @@
-import { weightedNonMaxSuppression, generateBoxDecoder, sigmoid } from './blazeUtils.js';
-import { CONSTANTS } from './constants.js';
-import { loadInputImage, Normalization, normalizeRadians } from './demoUtils.js';
+import { weightedNonMaxSuppression, generateBoxDecoder, sigmoid } from '../common/blazeUtils.js';
+import { writeInputImage, Normalization, normalizeRadians } from '../common/demoUtils.js';
 import anchors from './blazehandAnchors.js';
 
 const BLAZEPALM_REQUIRED_INPUT_WIDTH = 256;
@@ -83,13 +82,13 @@ const BLAZEHAND_FEATURE_COORDINATE_COUNT = 3;
  * @param {number} outputBoxesRef
  * @param {number} outputScoresRef
  */
-export function blazepalmPostprocess(heap, outputBoxesRef, outputScoresRef) {
-    let boxes = decodeBoxes(heap, outputBoxesRef);
+export function blazepalmPostprocess(boxPredictions, scores) {
+    let boxes = decodeBoxes(boxPredictions);
     const rawScores = [];
 
     for (let i = 0; i < BLAZEPALM_TENSOR_COUNT; i++) {
-        rawScores.push(heap[outputScoresRef + i]);
-        boxes[i].score = sigmoid(Math.max(Math.min(heap[outputScoresRef + i], SCORE_THRESHOLD), -SCORE_THRESHOLD));
+        rawScores.push(scores[i]);
+        boxes[i].score = sigmoid(Math.max(Math.min(scores[i], SCORE_THRESHOLD), -SCORE_THRESHOLD));
     }
 
     boxes = boxes.filter(b => b.score > MINIMUM_SCORE_THRESHOLD);
@@ -111,38 +110,19 @@ export function blazepalmPostprocess(heap, outputBoxesRef, outputScoresRef) {
 const decodeBoxes = generateBoxDecoder(BLAZEHAND_INPUT_RESOLUTION, BLAZEPALM_TENSOR_COUNT, BLAZEPALM_TENSOR_SIZE, BLAZEPALM_FEATURE_COUNT, anchors);
 
 export function computeBlazepalm(ailia, inputPic) {
-    const { inputImageBufferRef, totalInputSize } = loadInputImage(
-        ailia,
-        inputPic,
-        BLAZEPALM_REQUIRED_INPUT_WIDTH,
-        BLAZEPALM_REQUIRED_INPUT_HEIGHT,
-        {
-            normalize: Normalization.Unit
-        }
+    return ailia.run(
+        inputBuffers => writeInputImage(
+            inputBuffers.byIndex[0].buffer.Float32,
+            inputPic,
+            BLAZEPALM_REQUIRED_INPUT_WIDTH,
+            BLAZEPALM_REQUIRED_INPUT_HEIGHT,
+            { normalize: Normalization.Unit }
+        ),
+        outputBuffers => blazepalmPostprocess(
+            outputBuffers.byIndex[0].buffer.Float32,
+            outputBuffers.byIndex[1].buffer.Float32
+        )
     );
-
-    const outputShape = ailia.getOutputShape();
-
-    const totalBoxesOutputSize = outputShape.x * outputShape.y * outputShape.z * outputShape.w * CONSTANTS.SIZE_OF_FLOAT;
-
-    const outputBoxesRef = ailia.Module._malloc(totalBoxesOutputSize * CONSTANTS.SIZE_OF_FLOAT);
-    const outputScoresRef = ailia.Module._malloc(2 * CONSTANTS.SIZE_OF_FLOAT);
-    const outputSizeRef = ailia.Module._malloc(CONSTANTS.SIZE_OF_REF);
-
-    // struct AILIANetwork* net, void* dest, unsigned int dest_size, const void* src, unsigned int src_size
-    ailia.call('ailiaPredict', 'number', [ailia.ailiaDoublePointer.getPointer(), outputBoxesRef, totalBoxesOutputSize, inputImageBufferRef, totalInputSize]);
-
-    // ailiaRefOutputBlobBuffer(struct AILIANetwork* net, const void** ptr, unsigned int* size, unsigned int index);
-    ailia.call('ailiaRefOutputBlobBuffer', 'number', [ailia.ailiaDoublePointer.getPointer(), outputScoresRef, outputSizeRef, 1]);
-
-    const palms = blazepalmPostprocess(ailia.Module.HEAPF32, outputBoxesRef / CONSTANTS.SIZE_OF_FLOAT, ailia.Module.HEAPU32[outputScoresRef / CONSTANTS.SIZE_OF_U32] / CONSTANTS.SIZE_OF_U32);
-
-    ailia.Module._free(outputBoxesRef);
-    ailia.Module._free(outputScoresRef);
-    ailia.Module._free(outputSizeRef);
-    ailia.Module._free(inputImageBufferRef);
-
-    return palms;
 }
 
 /**
@@ -304,15 +284,12 @@ function extractRegionsOfInterest(inputPic, regionsOfInterest) {
  * @param {*} transforms
  * @returns
  */
-function denormalizeLandmarks(heap, landmarksBufferRef, transforms) {
+function denormalizeLandmarks(landmarks, transforms) {
     const handCount = transforms.length;
     const hands = new Array(handCount);
 
     function getFloat(hI, lI, cI) {
-        const i = (hI * BLAZEHAND_LANDMARK_COUNT + lI) * BLAZEHAND_FEATURE_COORDINATE_COUNT + cI;
-        const f = heap[landmarksBufferRef + i];
-
-        return f;
+        return landmarks[(hI * BLAZEHAND_LANDMARK_COUNT + lI) * BLAZEHAND_FEATURE_COORDINATE_COUNT + cI];
     }
 
     for (let handIndex = 0; handIndex < handCount; handIndex++) {
@@ -451,68 +428,33 @@ export function computeBlazehandFromPreviousLandmarks(ailia, inputPic, hands) {
 
 export function computeBlazehandFromRegionsOfInterest(ailia, inputPic, detectedRegionsOfInterest) {
     const extractedRegionsOfInterest = extractRegionsOfInterest(inputPic, detectedRegionsOfInterest);
-
-    const { inputImageBufferRef, totalInputSize } = loadInputImage(
-        ailia,
-        extractedRegionsOfInterest.canvases,
-        BLAZEHAND_INPUT_RESOLUTION,
-        BLAZEHAND_INPUT_RESOLUTION,
-        {
-            normalize: Normalization.Unit
-        }
-    );
-
     const handCount = extractedRegionsOfInterest.canvases.length;
 
-    const handFlagBufferRef = ailia.Module._malloc(handCount * CONSTANTS.SIZE_OF_FLOAT);
-    const handFlagBufferSizeRef = ailia.Module._malloc(CONSTANTS.SIZE_OF_REF);
+    // One crop per hand, so the batch dimension has to follow the hand count
+    const hands = ailia.run(
+        inputBuffers => writeInputImage(
+            inputBuffers.byIndex[0].buffer.Float32,
+            extractedRegionsOfInterest.canvases,
+            BLAZEHAND_INPUT_RESOLUTION,
+            BLAZEHAND_INPUT_RESOLUTION,
+            { normalize: Normalization.Unit }
+        ),
+        outputBuffers => {
+            const presence = outputBuffers.byIndex[0].buffer.Float32;
+            const handedness = outputBuffers.byIndex[1].buffer.Float32;
+            const landmarks = outputBuffers.byIndex[2].buffer.Float32;
 
-    const handednessBufferRef = ailia.Module._malloc(handCount * CONSTANTS.SIZE_OF_FLOAT);
-    const handednessBufferSizeRef = ailia.Module._malloc(CONSTANTS.SIZE_OF_REF);
-
-    const landmarksBufferRef = ailia.Module._malloc(handCount * BLAZEHAND_LANDMARK_COUNT * BLAZEHAND_FEATURE_COORDINATE_COUNT * CONSTANTS.SIZE_OF_FLOAT);
-    const landmarksBufferSizeRef = ailia.Module._malloc(CONSTANTS.SIZE_OF_REF);
-
-    ailia.setInputShape(BLAZEHAND_INPUT_RESOLUTION, BLAZEHAND_INPUT_RESOLUTION, BLAZEHAND_INPUT_CHANNEL_COUNT, handCount);
-
-    // struct AILIANetwork* net, void* dest, unsigned int dest_size, const void* src, unsigned int src_size
-    ailia.call('ailiaPredict', 'number', [ailia.ailiaDoublePointer.getPointer(), handFlagBufferRef, handFlagBufferSizeRef, inputImageBufferRef, totalInputSize]);
-
-    console.log('Ran the blazehand network to completion');
-
-    // ailiaRefOutputBlobBuffer(struct AILIANetwork* net, const void** ptr, unsigned int* size, unsigned int index);
-    ailia.call('ailiaRefOutputBlobBuffer', 'number', [ailia.ailiaDoublePointer.getPointer(), handednessBufferRef, handednessBufferSizeRef, 1]);
-
-    // ailiaRefOutputBlobBuffer(struct AILIANetwork* net, const void** ptr, unsigned int* size, unsigned int index);
-    ailia.call('ailiaRefOutputBlobBuffer', 'number', [ailia.ailiaDoublePointer.getPointer(), landmarksBufferRef, landmarksBufferSizeRef, 2]);
-
-    const hands = denormalizeLandmarks(
-        ailia.Module.HEAPF32,
-        ailia.Module.HEAPU32[landmarksBufferRef / CONSTANTS.SIZE_OF_U32] / CONSTANTS.SIZE_OF_U32,
-        extractedRegionsOfInterest.transformsFromRegionOfInterest
+            return denormalizeLandmarks(
+                landmarks,
+                extractedRegionsOfInterest.transformsFromRegionOfInterest
+            ).map((hand, i) => Object.assign(hand, {
+                presence: presence[i],
+                handedness: handedness[i],
+                isRightHand: handedness[i] > BLAZEHAND_RIGHT_HANDEDNESS_THRESHOLD
+            }));
+        },
+        [[handCount, BLAZEHAND_INPUT_CHANNEL_COUNT, BLAZEHAND_INPUT_RESOLUTION, BLAZEHAND_INPUT_RESOLUTION]]
     );
-
-    function getHandFlagFloat(hI) {
-        return ailia.Module.HEAPF32[handFlagBufferRef / CONSTANTS.SIZE_OF_FLOAT + hI];
-    }
-
-    function getHandednessFlag(hI) {
-        return ailia.Module.HEAPF32[ailia.Module.HEAPU32[handednessBufferRef / CONSTANTS.SIZE_OF_U32] / CONSTANTS.SIZE_OF_FLOAT + hI];
-    }
-
-    hands.forEach((hand, i) => {
-        hand.presence = getHandFlagFloat(i);
-        hand.handedness = getHandednessFlag(i);
-        hand.isRightHand = hand.handedness > BLAZEHAND_RIGHT_HANDEDNESS_THRESHOLD;
-    });
-
-    ailia.Module._free(inputImageBufferRef);
-    ailia.Module._free(handFlagBufferRef);
-    ailia.Module._free(handFlagBufferSizeRef);
-    ailia.Module._free(handednessBufferRef);
-    ailia.Module._free(handednessBufferSizeRef);
-    ailia.Module._free(landmarksBufferRef);
-    ailia.Module._free(landmarksBufferSizeRef);
 
     return hands.filter(hand => hand.presence > BLAZEHAND_DETECTION_THRESHOLD);
 }

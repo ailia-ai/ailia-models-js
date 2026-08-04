@@ -1,36 +1,87 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <title>ailia.js Demo</title>
-    </head>
-    <body>
-        <h1>ailia.js Demo</h1>
-        <h1>About</h1>
-        At this site, you can experience AI inference in your browser using WebAssembly.<br/>
-        <h1>Available models</h1>
-        <ul>
-            <li><a href="example_blazeface.html">Blaze Face</a></li>
-            <li><a href="example_blazehand.html">Blaze Hand</a></li>
-            <li><a href="example_mnetssd.html">Mobilenet SSD</a></li>
-            <li><a href="example_yolox.html">YOLOX Tiny</a></li>
-        </ul>
-        <h1>Usage</h1>
-        <ul>
-            <li><a href="https://docs.ailia.ai/sdk/js/en/tutorial-get_started.html">Get Started</a></li>
-            <li><a href="https://docs.ailia.ai/sdk/js/en/Ailia.html">API Reference</a></li>
-        </ul>
-        <h1>Contact</h1>
-        <ul>
-            ailia.js is a commercial library. Commercial use requires a license.
-            Please contact ax Inc.<br/>
-            <a href="https://axinc.jp/">https://axinc.jp/</a>
-        </ul>
-        <h1>OSS License</h1>
-        <ul>
-            <li><a href="https://github.com/axinc-ai/ailia-models/blob/master/face_detection/blazeface/LICENSE">Blaze Face</a></li>
-            <li><a href="https://github.com/axinc-ai/ailia-models/blob/master/hand_recognition/blazehand/LICENSE">Blaze Hand</a></li>
-            <li><a href="https://github.com/axinc-ai/ailia-models/blob/master/object_detection/mobilenet_ssd/LICENSE">Mobilenet SSD</a></li>
-            <li><a href="https://github.com/axinc-ai/ailia-models/blob/master/object_detection/yolox/LICENSE">YOLOX Tiny</a></li>
-        </ul>
-    </body>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ailia.js Demo</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="page">
+
+        <header class="site-header">
+            <h1>ailia.js Demo</h1>
+            <p class="tagline">Run AI inference directly in your browser with WebAssembly.</p>
+        </header>
+
+        <section>
+            <h2>About</h2>
+            <p>
+                ailia.js is the JavaScript version of the ailia SDK. It runs neural networks
+                entirely inside the browser using WebAssembly, so no server-side inference and
+                no data upload are required. Pick a model below to try it with a sample image or
+                your camera.
+            </p>
+        </section>
+
+        <section>
+            <h2>Available models</h2>
+            <div class="card-grid">
+                <a class="card" href="blazeface/">
+                    <span class="card-title">Blaze Face</span>
+                    <span class="card-desc">Face detection</span>
+                </a>
+                <a class="card" href="blazehand/">
+                    <span class="card-title">Blaze Hand</span>
+                    <span class="card-desc">Hand landmark detection</span>
+                </a>
+                <a class="card" href="mobilenet_ssd/">
+                    <span class="card-title">MobileNet SSD</span>
+                    <span class="card-desc">Object detection</span>
+                </a>
+                <a class="card" href="yolox/">
+                    <span class="card-title">YOLOX Tiny</span>
+                    <span class="card-desc">Object detection</span>
+                </a>
+            </div>
+        </section>
+
+        <section>
+            <h2>Documentation</h2>
+            <ul class="link-list">
+                <li><a href="https://docs.ailia.ai/sdk/js/en/tutorial-get_started.html">Get Started</a> &mdash; set up ailia.js in your own project</li>
+                <li><a href="https://docs.ailia.ai/sdk/js/en/Ailia.html">API Reference</a> &mdash; the Ailia class and its methods</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>License &amp; contact</h2>
+            <div class="note">
+                <p>
+                    ailia.js is a commercial library. Commercial use requires a license.
+                    For pricing and licensing, please contact ailia Inc.
+                </p>
+                <p><a href="https://ailia.ai/">https://ailia.ai/</a></p>
+            </div>
+        </section>
+
+        <section>
+            <h2>OSS licenses</h2>
+            <ul class="link-list">
+                <li><a href="https://github.com/axinc-ai/ailia-models/blob/master/face_detection/blazeface/LICENSE">Blaze Face</a></li>
+                <li><a href="https://github.com/axinc-ai/ailia-models/blob/master/hand_recognition/blazehand/LICENSE">Blaze Hand</a></li>
+                <li><a href="https://github.com/axinc-ai/ailia-models/blob/master/object_detection/mobilenet_ssd/LICENSE">MobileNet SSD</a></li>
+                <li><a href="https://github.com/axinc-ai/ailia-models/blob/master/object_detection/yolox/LICENSE">YOLOX Tiny</a></li>
+            </ul>
+        </section>
+
+        <footer class="site-footer">
+            &copy; ailia Inc. &mdash; ailia.js Demo
+        </footer>
+
+    </div>
+</body>
+
 </html>
