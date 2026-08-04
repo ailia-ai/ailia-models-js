@@ -10,7 +10,7 @@
     <script type='module'>
         import { Ailia } from '../ailia-js/ailia.js';
         import { setStatus, createAiliaWithModel } from '../common/demoUtils.js';
-        import { SileroVad, SAMPLE_RATE, WINDOW_SAMPLES, SpeechSegmenter, Resampler, computeSpeechProbabilities, findSpeechSegments, collectSegments } from './vadUtils.js';
+        import { SileroVad, SAMPLE_RATE, WINDOW_SAMPLES, SpeechSegmenter, Resampler, computeSpeechProbabilities, findSpeechSegments } from './vadUtils.js';
         import { drawWaveform, play } from './waveform.js';
 
         const MAX_RECORDING_SECONDS = 30;
@@ -108,10 +108,6 @@
                     speechSeconds: +(speechSamples / SAMPLE_RATE).toFixed(2),
                     speechShare: `${(100 * speechSamples / Math.max(1, samples.length)).toFixed(1)}%`
                 }, null, 4);
-
-                const cutButton = document.querySelector('.cutButton');
-                cutButton.disabled = segments.length === 0;
-                cutButton.onclick = () => play(collectSegments(segments, samples), SAMPLE_RATE);
             }
 
             function showResult(samples, windowCount, segments) {
@@ -238,7 +234,6 @@
                 vad.reset();
                 segmentList.innerHTML = '';
                 resultJson.innerText = '';
-                document.querySelector('.cutButton').disabled = true;
 
                 // Drawing is driven by a timer rather than by the audio callback, so
                 // the trace advances smoothly however the buffers land
@@ -451,7 +446,6 @@
                 <option value="">Default microphone</option>
             </select>
             <button class="microphoneButton">Record from microphone</button>
-            <button class="cutButton" disabled>Play speech only</button>
         </div>
 
         <section>

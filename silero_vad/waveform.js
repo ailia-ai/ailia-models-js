@@ -68,22 +68,6 @@ export function drawWaveform(canvas, samples, segments = [], visibleSamples = sa
 }
 
 /**
- * Wraps samples in an AudioBuffer so they can be played back.
- *
- * @param {Float32Array} samples
- * @param {number} sampleRate
- * @returns {AudioBuffer}
- */
-export function toAudioBuffer(samples, sampleRate) {
-    const context = new AudioContext({ sampleRate });
-    const buffer = context.createBuffer(1, Math.max(1, samples.length), sampleRate);
-    buffer.copyToChannel(samples, 0);
-    context.close();
-
-    return buffer;
-}
-
-/**
  * @param {Float32Array} samples
  * @param {number} sampleRate
  */

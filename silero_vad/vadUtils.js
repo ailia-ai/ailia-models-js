@@ -304,21 +304,3 @@ export function findSpeechSegments(probabilities, totalSamples) {
 
     return segments;
 }
-
-/**
- * @param {{start: number, end: number}[]} segments
- * @param {Float32Array} samples
- * @returns {Float32Array} the segments concatenated, with the rest dropped
- */
-export function collectSegments(segments, samples) {
-    const total = segments.reduce((sum, s) => sum + (s.end - s.start), 0);
-    const collected = new Float32Array(total);
-
-    let offset = 0;
-    for (const segment of segments) {
-        collected.set(samples.subarray(segment.start, segment.end), offset);
-        offset += segment.end - segment.start;
-    }
-
-    return collected;
-}
