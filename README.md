@@ -21,8 +21,9 @@ Demos in this repository
 | [`u2netp/`](u2netp/) | Background removal | `u2netp_opset11.onnx` |
 | [`mobilenet_ssd/`](mobilenet_ssd/) | Object detection (20 VOC categories) | `mb2-ssd-lite.onnx` |
 | [`yolox/`](yolox/) | Object detection (80 COCO categories) | `yolox_tiny.onnx` |
+| [`silero_vad/`](silero_vad/) | Voice activity detection | `silero_vad_v6_2.onnx` |
 
-Each demo runs on a bundled sample image (click the image to substitute your own) or on your camera.
+Each demo runs on a bundled sample image (click the image to substitute your own) or on your camera. Silero VAD is the exception: it takes audio, either the bundled clip or your microphone.
 
 FaceMesh-V2's face detector is MediaPipe's short range model, which expects the face to fill a good part of the frame. The face in the shared sample image is smaller than that, so the demo searches a sub-region of the picture and maps the landmarks back, drawing them over the whole image.
 
@@ -78,6 +79,10 @@ Two ways to call `ailia.js`
 
 - `u2netp/` also uses `ailia.run`. Its preprocessing needs per channel mean and standard deviation rather than one of the shared normalization modes, so it writes the tensor itself in the preprocessing callback.
 
+- `silero_vad/` is the one demo that cannot use `ailia.run`. Its third input, `sr`, is a rank 0 int64, and `ailia.run` sizes every input buffer as rank-1-or-more float32, so the demo drives ailia's blob level calls directly.
+
+  It also runs at 8 kHz rather than 16 kHz. The model picks its sample rate with an ONNX `If` node on `sr`, and that rank 0 int64 input cannot be delivered through ailia.js at all: whatever is written to it, the graph takes the 8 kHz branch, and feeding 16 kHz sized windows fails in the decoder's LSTM with `Invalid X dim (only 3d)`. 8 kHz is a configuration Silero supports, and it segments the bundled clip correctly, so the demo uses it. Raising this to 16 kHz needs a change in the SDK, not in this repository.
+
 - `mobilenet_ssd/` and `yolox/` use `AiliaDetector` instead. It wraps the detector algorithm, the category list and the thresholds for a known model type, and decodes the boxes natively, so there is no postprocessing to write. Moving these to `ailia.run` would mean reimplementing the SSD and YOLOX decoding in JavaScript.
 
 License
@@ -95,6 +100,7 @@ The model weights are redistributed here under their own upstream licenses, and 
 | [`u2netp/LICENSE`](u2netp/LICENSE) | Apache 2.0 |
 | [`mobilenet_ssd/LICENSE`](mobilenet_ssd/LICENSE) | MIT |
 | [`yolox/LICENSE`](yolox/LICENSE) | Apache 2.0 |
+| [`silero_vad/LICENSE`](silero_vad/LICENSE) | MIT |
 
 These cover the models only. They say nothing about `ailia.js` itself, which stays under the commercial license above.
 

@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Silero VAD | ailia.js Demo</title>
+    <link rel="stylesheet" href="../style.css" />
+
+    <script type='module'>
+        import { Ailia } from '../ailia-js/ailia.js';
+        import { setStatus, createAiliaWithModel } from '../common/demoUtils.js';
+        import { SileroVad, SAMPLE_RATE, WINDOW_SAMPLES, SpeechSegmenter, Resampler, computeSpeechProbabilities, findSpeechSegments } from './vadUtils.js';
+        import { drawWaveform, play } from './waveform.js';
+
+        const MAX_RECORDING_SECONDS = 30;
+        // How much of the recording the live view shows. Holding the time scale
+        // fixed makes the trace scroll instead of squeezing as the buffer fills.
+        const LIVE_WINDOW_SECONDS = 8;
+        // Redraw interval while recording. A timer is used rather than the animation
+        // frame callback, which stops firing whenever the page is not being rendered
+        // and would leave the trace and the status frozen.
+        const LIVE_REDRAW_MS = 40;
+
+        if (document.readyState === 'complete') { // Safari
+            onload();
+        }else{ // Chrome or Safari
+            window.addEventListener('load', onload);
+        }
+
+        async function onload(){
+            await Ailia.initialize();
+            const ailiaVad = await createAiliaWithModel('silero_vad', 'silero_vad_v6_2');
+
+            if (ailiaVad === null) {
+                setStatus('Could not load the model files from the backend', 'error');
+                return;
+            }
+
+            const vad = new SileroVad(ailiaVad);
+
+            document.body.classList.add('model-loaded');
+            setStatus('Model ready to run');
+
+            const waveformCanvas = document.querySelector('.waveform');
+            const segmentList = document.querySelector('.segment-list');
+            const resultJson = document.querySelector('.result-json');
+            const sampleButton = document.querySelector('.sampleAudioButton');
+            const micButton = document.querySelector('.microphoneButton');
+
+            const deviceSelect = document.querySelector('.device-select');
+
+            // Labels are only revealed once the user has granted access, so this is
+            // called again after the first successful getUserMedia
+            async function listMicrophones() {
+                if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+                    return;
+                }
+
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const inputs = devices.filter(device => device.kind === 'audioinput');
+                const chosen = deviceSelect.value;
+
+                deviceSelect.innerHTML = '<option value="">Default microphone</option>';
+                inputs.forEach((device, i) => {
+                    const option = document.createElement('option');
+                    option.value = device.deviceId;
+                    option.textContent = device.label || `Microphone ${i + 1}`;
+                    deviceSelect.appendChild(option);
+                });
+
+                if (chosen && inputs.some(device => device.deviceId === chosen)) {
+                    deviceSelect.value = chosen;
+                }
+                console.log(`${inputs.length} microphone(s) available`);
+            }
+
+            listMicrophones();
+            if (navigator.mediaDevices) {
+                navigator.mediaDevices.addEventListener('devicechange', listMicrophones);
+            }
+
+            // null when idle, otherwise the function that tears the capture down
+            let stopCapture = null;
+            let startingCapture = false;
+
+            function appendSegment(samples, segment, index) {
+                const seconds = at => (at / SAMPLE_RATE).toFixed(2);
+                const item = document.createElement('li');
+                item.innerHTML = `<button class="segment-play">Play</button> ` +
+                    `segment ${index}: ${seconds(segment.start)}s &ndash; ${seconds(segment.end)}s ` +
+                    `(${seconds(segment.end - segment.start)}s)`;
+                item.querySelector('.segment-play').addEventListener('click', () =>
+                    play(samples.slice(segment.start, segment.end), SAMPLE_RATE));
+                segmentList.appendChild(item);
+            }
+
+            let captureRate = SAMPLE_RATE;
+
+            function summarize(samples, windowCount, segments) {
+                const speechSamples = segments.reduce((sum, s) => sum + (s.end - s.start), 0);
+                resultJson.innerText = JSON.stringify({
+                    sampleRate: SAMPLE_RATE,
+                    captureRate: captureRate,
+                    durationSeconds: +(samples.length / SAMPLE_RATE).toFixed(2),
+                    windows: windowCount,
+                    speechSegments: segments.length,
+                    speechSeconds: +(speechSamples / SAMPLE_RATE).toFixed(2),
+                    speechShare: `${(100 * speechSamples / Math.max(1, samples.length)).toFixed(1)}%`
+                }, null, 4);
+            }
+
+            function showResult(samples, windowCount, segments) {
+                drawWaveform(waveformCanvas, samples, segments);
+                segmentList.innerHTML = '';
+                segments.forEach((segment, i) => appendSegment(samples, segment, i + 1));
+                summarize(samples, windowCount, segments);
+            }
+
+            async function runOnSampleAudio() {
+                try {
+                    setStatus('Decoding the sample audio');
+                    const response = await fetch('en_example.wav');
+                    const context = new AudioContext({ sampleRate: SAMPLE_RATE });
+                    const decoded = await context.decodeAudioData(await response.arrayBuffer());
+                    context.close();
+                    const samples = decoded.getChannelData(0);
+                    // The file is decoded straight to the model's rate
+                    captureRate = SAMPLE_RATE;
+
+                    const startTime = new Date();
+                    const probabilities = computeSpeechProbabilities(vad, samples);
+                    const endTime = new Date();
+                    const segments = findSpeechSegments(probabilities, samples.length);
+
+                    setStatus('The model has finished running ' + (endTime.getTime() - startTime.getTime()) + 'ms');
+                    showResult(samples, probabilities.length, segments);
+                } catch (e) {
+                    console.error(e);
+                    setStatus(`Error while running the model: ${e.message}`, 'error');
+                }
+            }
+
+            async function startRecording() {
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    setStatus('Your browser does not support user media.', 'error');
+                    return;
+                }
+                if (!window.AudioWorkletNode || !('audioWorklet' in AudioContext.prototype)) {
+                    setStatus('Your browser does not support AudioWorklet.', 'error');
+                    return;
+                }
+
+                startingCapture = true;
+                let stream;
+                try {
+                    const audio = {
+                        echoCancellation: false,
+                        noiseSuppression: false,
+                        autoGainControl: false
+                    };
+                    if (deviceSelect.value) {
+                        audio.deviceId = { exact: deviceSelect.value };
+                    }
+                    stream = await navigator.mediaDevices.getUserMedia({ audio });
+                } catch (error) {
+                    startingCapture = false;
+                    setStatus(`Failed to acquire the microphone: ${error.message}`, 'error');
+                    return;
+                }
+                startingCapture = false;
+                listMicrophones();
+
+                // Capture at whatever rate the hardware runs at and convert below.
+                // Forcing the context to the model's 8 kHz and connecting a 48 kHz
+                // microphone to it can yield nothing but silence.
+                const context = new AudioContext();
+                // A context created before a gesture can start suspended, and then
+                // no audio would ever be delivered
+                await context.resume();
+                const resampler = new Resampler(context.sampleRate, SAMPLE_RATE);
+                captureRate = context.sampleRate;
+                console.log(`Capturing at ${context.sampleRate} Hz, resampling to ${SAMPLE_RATE} Hz`);
+
+                try {
+                    await context.audioWorklet.addModule('captureWorklet.js');
+                } catch (error) {
+                    stream.getTracks().forEach(track => track.stop());
+                    context.close();
+                    setStatus(`Failed to load the capture worklet: ${error.message}`, 'error');
+                    return;
+                }
+                const track = stream.getAudioTracks()[0];
+                console.log('Microphone track:', track && track.label, {
+                    enabled: track && track.enabled,
+                    muted: track && track.muted,
+                    readyState: track && track.readyState,
+                    settings: track && track.getSettings()
+                });
+
+                // Chrome and Safari can feed Web Audio nothing but zeros unless the
+                // stream is also consumed by a media element, even though the track
+                // reports itself live. Keep a muted one attached for the duration.
+                const keepAlive = new Audio();
+                keepAlive.srcObject = stream;
+                keepAlive.muted = true;
+                try {
+                    await keepAlive.play();
+                } catch (error) {
+                    console.warn('Could not start the keep-alive element:', error.message);
+                }
+
+                const source = context.createMediaStreamSource(stream);
+                const capture = new AudioWorkletNode(context, 'microphone-capture', {
+                    numberOfInputs: 1,
+                    numberOfOutputs: 1,
+                    outputChannelCount: [1],
+                    // Have the graph downmix a stereo device to mono for us
+                    channelCount: 1,
+                    channelCountMode: 'explicit',
+                    channelInterpretation: 'speakers'
+                });
+
+                const captured = new Float32Array(SAMPLE_RATE * MAX_RECORDING_SECONDS);
+                const liveWindow = SAMPLE_RATE * LIVE_WINDOW_SECONDS;
+                const segmenter = new SpeechSegmenter();
+                const segments = [];
+                let capturedLength = 0;
+                let windowCount = 0;
+                let pending = new Float32Array(0);
+                let speaking = false;
+                let redraw = 0;
+
+                vad.reset();
+                segmentList.innerHTML = '';
+                resultJson.innerText = '';
+
+                // Drawing is driven by a timer rather than by the audio callback, so
+                // the trace advances smoothly however the buffers land
+                const drawLive = () => {
+                    const from = Math.max(0, capturedLength - liveWindow);
+                    const open = segmenter.openSegment;
+                    const visible = (open ? segments.concat(open) : segments)
+                        .map(segment => ({ start: segment.start - from, end: segment.end - from }))
+                        .filter(segment => segment.end > 0);
+
+                    drawWaveform(waveformCanvas, captured.subarray(from, capturedLength), visible, liveWindow);
+
+                    setStatus(`Recording ${(capturedLength / SAMPLE_RATE).toFixed(1)}s of ` +
+                        `${MAX_RECORDING_SECONDS}s \u2014 ${speaking ? 'speech' : 'silence'}`);
+
+                };
+                drawLive();
+                redraw = setInterval(drawLive, LIVE_REDRAW_MS);
+
+                // Diagnostics: report the first audio seen, then a summary each
+                // second, so a silent capture can be traced to a stage
+                let blocksSeen = 0;
+                let nativePeak = 0;
+                let resampledPeak = 0;
+                let sawAudio = false;
+                let lastProbability = 0;
+                const startedAt = performance.now();
+                let reportedAt = startedAt;
+
+                capture.port.onmessage = event => {
+                    const message = event.data;
+
+                    if (message.type === 'started') {
+                        console.log('Worklet running:', message);
+                        return;
+                    }
+                    if (message.type === 'noInput') {
+                        console.warn(`Worklet has had no input channel for ${message.calls} quanta`);
+                        return;
+                    }
+
+                    blocksSeen++;
+                    if (blocksSeen === 1) {
+                        console.log('First block:', Array.from(message.samples.slice(0, 8)),
+                            'peak', message.peak);
+                    }
+                    if (message.peak > nativePeak) {
+                        nativePeak = message.peak;
+                    }
+                    if (!sawAudio && message.peak > 0) {
+                        sawAudio = true;
+                        console.log(`Audio detected: peak ${message.peak.toFixed(5)} after ` +
+                            `${blocksSeen} block(s), ${((performance.now() - startedAt) / 1000).toFixed(2)}s in`);
+                    }
+
+                    const resampled = resampler.process(message.samples);
+                    for (let i = 0; i < resampled.length; i++) {
+                        const magnitude = Math.abs(resampled[i]);
+                        if (magnitude > resampledPeak) {
+                            resampledPeak = magnitude;
+                        }
+                    }
+
+                    const room = captured.length - capturedLength;
+                    if (room <= 0) {
+                        stopRecording();
+                        return;
+                    }
+                    const taken = resampled.subarray(0, Math.min(resampled.length, room));
+                    captured.set(taken, capturedLength);
+                    capturedLength += taken.length;
+
+                    // Feed whole windows to the model, keeping the remainder
+                    const merged = new Float32Array(pending.length + taken.length);
+                    merged.set(pending, 0);
+                    merged.set(taken, pending.length);
+
+                    let offset = 0;
+                    while (offset + WINDOW_SAMPLES <= merged.length) {
+                        const probability = vad.process(merged.subarray(offset, offset + WINDOW_SAMPLES));
+                        lastProbability = probability;
+                        speaking = probability >= 0.5;
+                        windowCount++;
+
+                        // A segment that has run long enough to survive the minimum
+                        // duration is cut out as soon as it closes, without waiting
+                        // for the recording to end
+                        const segment = segmenter.push(probability);
+                        if (segment) {
+                            segments.push(segment);
+                            appendSegment(captured, segment, segments.length);
+                            summarize(captured.subarray(0, capturedLength), windowCount, segments);
+                        }
+
+                        offset += WINDOW_SAMPLES;
+                    }
+                    pending = merged.slice(offset);
+
+                    const now = performance.now();
+                    if (now - reportedAt >= 1000) {
+                        reportedAt = now;
+                        console.log(`${((now - startedAt) / 1000).toFixed(1)}s: ${blocksSeen} blocks, ` +
+                            `peak ${nativePeak.toFixed(5)} at ${captureRate} Hz / ` +
+                            `${resampledPeak.toFixed(5)} at ${SAMPLE_RATE} Hz, ` +
+                            `${capturedLength} samples, ${windowCount} windows, ` +
+                            `last probability ${lastProbability.toFixed(3)}`);
+                        if (!sawAudio) {
+                            console.warn('Still nothing but zeros from the microphone. ' +
+                                'Check that the right input device is selected and not muted.');
+                        }
+                        nativePeak = 0;
+                        resampledPeak = 0;
+                    }
+                };
+
+                source.connect(capture);
+                // A worklet only runs while it can be reached from the destination,
+                // so route it there through a muted gain rather than to the speakers
+                const mute = context.createGain();
+                mute.gain.value = 0;
+                capture.connect(mute);
+                mute.connect(context.destination);
+
+                stopCapture = () => {
+                    clearInterval(redraw);
+                    capture.port.onmessage = null;
+                    capture.disconnect();
+                    source.disconnect();
+                    keepAlive.pause();
+                    keepAlive.srcObject = null;
+                    mute.disconnect();
+                    stream.getTracks().forEach(track => track.stop());
+                    context.close();
+
+                    const samples = captured.slice(0, capturedLength);
+                    const last = segmenter.flush(samples.length);
+                    if (last) {
+                        segments.push(last);
+                        appendSegment(samples, last, segments.length);
+                    }
+
+                    // Rebind the play buttons to the trimmed copy and redraw the
+                    // whole recording rather than the live window
+                    showResult(samples, windowCount, segments);
+                    setStatus(`Stopped. Recorded ${(capturedLength / SAMPLE_RATE).toFixed(1)}s, ` +
+                        `${segments.length} speech segment${segments.length === 1 ? '' : 's'}`);
+                };
+
+                setTimeout(() => {
+                    if (stopCapture && blocksSeen === 0) {
+                        console.warn('No audio blocks have arrived from the worklet at all. ' +
+                            'The node may not be pulled by the graph, or the track may be dead.');
+                    }
+                }, 1500);
+
+                micButton.innerText = 'Stop recording';
+            }
+
+            function stopRecording() {
+                if (!stopCapture) {
+                    return;
+                }
+                const stop = stopCapture;
+                stopCapture = null;
+                micButton.innerText = 'Record from microphone';
+                stop();
+            }
+
+            sampleButton.addEventListener('click', () => {
+                stopRecording();
+                runOnSampleAudio();
+            });
+
+            deviceSelect.addEventListener('change', () => {
+                if (stopCapture) {
+                    stopRecording();
+                }
+            });
+
+            micButton.addEventListener('click', () => {
+                if (stopCapture) {
+                    stopRecording();
+                } else if (!startingCapture) {
+                    // Without this, a throw inside would leave the page looking idle
+                    startRecording().catch(error => {
+                        startingCapture = false;
+                        console.error(error);
+                        setStatus(`Failed to start recording: ${error.message}`, 'error');
+                    });
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="page page--wide">
+
+        <header class="site-header">
+            <a class="back-link" href="../">&larr; ailia.js Demo</a>
+            <h1>Silero VAD</h1>
+            <p class="tagline">Voice activity detection running in your browser with WebAssembly.</p>
+        </header>
+
+        <p class="status-container">Checking the model files</p>
+
+        <div class="controls">
+            <button class="sampleAudioButton">Run with sample audio</button>
+            <select class="device-select" aria-label="Microphone">
+                <option value="">Default microphone</option>
+            </select>
+            <button class="microphoneButton">Record from microphone</button>
+        </div>
+
+        <section>
+            <h2>Waveform</h2>
+            <canvas class="waveform" width="1024" height="220"></canvas>
+            <p class="waveform-caption">Stretches the model called speech are shaded and drawn in blue.</p>
+        </section>
+
+        <section>
+            <h2>Speech segments</h2>
+            <ul class="segment-list link-list"></ul>
+            <p class="result-json"></p>
+        </section>
+
+    </div>
+</body>
+
+</html>
