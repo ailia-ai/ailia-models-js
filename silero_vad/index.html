@@ -13,9 +13,6 @@
         import { SileroVad, SAMPLE_RATE, WINDOW_SAMPLES, SpeechSegmenter, Resampler, computeSpeechProbabilities, findSpeechSegments, collectSegments } from './vadUtils.js';
         import { drawWaveform, play } from './waveform.js';
 
-        // ScriptProcessorNode wants a power of two. This is a block at the
-        // hardware's rate, so at 48 kHz it is about 21 ms of audio.
-        const CAPTURE_BUFFER_SAMPLES = 1024;
         const MAX_RECORDING_SECONDS = 30;
         // How much of the recording the live view shows. Holding the time scale
         // fixed makes the trace scroll instead of squeezing as the buffer fills.
@@ -121,6 +118,10 @@
                     setStatus('Your browser does not support user media.', 'error');
                     return;
                 }
+                if (!window.AudioWorkletNode || !('audioWorklet' in AudioContext.prototype)) {
+                    setStatus('Your browser does not support AudioWorklet.', 'error');
+                    return;
+                }
 
                 startingCapture = true;
                 let stream;
@@ -144,8 +145,20 @@
                 captureRate = context.sampleRate;
                 console.log(`Capturing at ${context.sampleRate} Hz, resampling to ${SAMPLE_RATE} Hz`);
 
+                try {
+                    await context.audioWorklet.addModule('captureWorklet.js');
+                } catch (error) {
+                    stream.getTracks().forEach(track => track.stop());
+                    context.close();
+                    setStatus(`Failed to load the capture worklet: ${error.message}`, 'error');
+                    return;
+                }
                 const source = context.createMediaStreamSource(stream);
-                const processor = context.createScriptProcessor(CAPTURE_BUFFER_SAMPLES, 1, 1);
+                const capture = new AudioWorkletNode(context, 'microphone-capture', {
+                    numberOfInputs: 1,
+                    numberOfOutputs: 1,
+                    outputChannelCount: [1]
+                });
 
                 const captured = new Float32Array(SAMPLE_RATE * MAX_RECORDING_SECONDS);
                 const liveWindow = SAMPLE_RATE * LIVE_WINDOW_SECONDS;
@@ -180,8 +193,8 @@
                 drawLive();
                 redraw = setInterval(drawLive, LIVE_REDRAW_MS);
 
-                processor.onaudioprocess = event => {
-                    const resampled = resampler.process(event.inputBuffer.getChannelData(0));
+                capture.port.onmessage = event => {
+                    const resampled = resampler.process(event.data);
 
                     const room = captured.length - capturedLength;
                     if (room <= 0) {
@@ -218,18 +231,18 @@
                     pending = merged.slice(offset);
                 };
 
-                source.connect(processor);
-                // ScriptProcessorNode only runs while it is connected to the graph,
-                // so route it to a muted gain rather than straight to the speakers
+                source.connect(capture);
+                // A worklet only runs while it can be reached from the destination,
+                // so route it there through a muted gain rather than to the speakers
                 const mute = context.createGain();
                 mute.gain.value = 0;
-                processor.connect(mute);
+                capture.connect(mute);
                 mute.connect(context.destination);
 
                 stopCapture = () => {
                     clearInterval(redraw);
-                    processor.onaudioprocess = null;
-                    processor.disconnect();
+                    capture.port.onmessage = null;
+                    capture.disconnect();
                     source.disconnect();
                     mute.disconnect();
                     stream.getTracks().forEach(track => track.stop());
@@ -271,7 +284,12 @@
                 if (stopCapture) {
                     stopRecording();
                 } else if (!startingCapture) {
-                    startRecording();
+                    // Without this, a throw inside would leave the page looking idle
+                    startRecording().catch(error => {
+                        startingCapture = false;
+                        console.error(error);
+                        setStatus(`Failed to start recording: ${error.message}`, 'error');
+                    });
                 }
             });
         }
