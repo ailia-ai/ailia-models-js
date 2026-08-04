@@ -3,50 +3,9 @@
 
 <head>
     <meta charset="utf-8" />
-
-    <style>
-        .io-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 100%;
-        }
-
-        .io-container>* {
-            max-width: 45vw;
-            max-height: 500px;
-        }
-
-        .io-container>* img,
-        .io-container>* video,
-        .io-container>* canvas {
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        .result-container {
-            position: relative;
-        }
-
-        .result-json {
-            color: lightgrey;
-        }
-
-        .singleImageButton,
-        .videoStreamButton {
-            visibility: hidden;
-        }
-
-        .model-loaded .singleImageButton,
-        .model-loaded .videoStreamButton {
-            visibility: visible;
-        }
-
-        .status-container.error {
-            color: red;
-            font-weight: bold;
-            font-size: 1.25em;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blaze Hand | ailia.js Demo</title>
+    <link rel="stylesheet" href="style.css" />
 
     <script type='module'>
         import { Ailia } from './ailia-js/ailia.js';
@@ -151,21 +110,34 @@
     </script>
 </head>
 
-<body style="background-color: #fff">
-    <h1>Blazehand</h1>
-    <p class="status-container">Checking the model files</p>
-    <button class="singleImageButton"> Run with sample image</button>
-    <button class="videoStreamButton"> Run with camera </button>
-    <div class="io-container">
-        <div class="input-container">
-            <h2>Sample image (click to change)</h2>
-            <img class="sample-image" src='person_hand.jpg'></img>
+<body>
+    <div class="page page--wide">
+
+        <header class="site-header">
+            <a class="back-link" href="index.html">&larr; ailia.js Demo</a>
+            <h1>Blaze Hand</h1>
+            <p class="tagline">Hand landmark detection running in your browser with WebAssembly.</p>
+        </header>
+
+        <p class="status-container">Checking the model files</p>
+
+        <div class="controls">
+            <button class="singleImageButton">Run with sample image</button>
+            <button class="videoStreamButton">Run with camera</button>
         </div>
-        <div class="output-container">
-            <h2>Result</h2>
-            <div class="result-container"></div>
-            <p class="result-json"></p>
+
+        <div class="io-container">
+            <div class="input-container">
+                <h2>Sample image (click to change)</h2>
+                <img class="sample-image" src='person_hand.jpg'></img>
+            </div>
+            <div class="output-container">
+                <h2>Result</h2>
+                <div class="result-container"></div>
+                <p class="result-json"></p>
+            </div>
         </div>
+
     </div>
 </body>
 
