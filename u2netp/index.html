@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>U^2-Net (u2netp) | ailia.js Demo</title>
+    <link rel="stylesheet" href="../style.css" />
+
+    <script type='module'>
+        import { Ailia } from '../ailia-js/ailia.js';
+        import { computeU2net, plotCutout, plotMask } from './u2netUtils.js';
+        import { delay, setStatus, changeSampleImage, createAiliaWithModel, setupSampleImageRunButton, setupVideoStreamRunButton } from '../common/demoUtils.js';
+
+        if (document.readyState === 'complete') { // Safari
+            onload();
+        }else{ // Chrome or Safari
+            window.addEventListener('load', onload);
+        }
+
+        async function onload(){
+            const imageContainerElement = document.querySelector('.sample-image');
+            imageContainerElement.addEventListener('click', changeSampleImage.bind(null, imageContainerElement));
+
+            await Ailia.initialize();
+            const ailiaU2net = await createAiliaWithModel('u2netp', 'u2netp_opset11');
+
+            if (ailiaU2net === null) {
+                setStatus('Could not load the model files from the backend', 'error');
+                return;
+            }
+
+            document.body.classList.add('model-loaded');
+            setStatus('Model ready to run');
+
+            const maskCanvas = document.querySelector('.mask-canvas');
+            const myresult = document.querySelector('.result-json');
+
+            async function processImage(imageElement, outputOverlayCanvas) {
+                try {
+                    await delay(1);
+                    var startTime = new Date();
+                    const result = computeU2net(ailiaU2net, imageElement);
+                    var endTime = new Date();
+                    setStatus('The model has finished running ' + (endTime.getTime() - startTime.getTime()) + 'ms');
+
+                    plotCutout(outputOverlayCanvas, imageElement, result);
+
+                    maskCanvas.width = outputOverlayCanvas.width;
+                    maskCanvas.height = outputOverlayCanvas.height;
+                    plotMask(maskCanvas, result);
+
+                    // A 320x320 map is far too much to print, so summarize it
+                    let foreground = 0;
+                    for (const value of result.mask) {
+                        if (value >= 128) {
+                            foreground++;
+                        }
+                    }
+                    myresult.innerText = JSON.stringify({
+                        maskSize: `${result.size}x${result.size}`,
+                        foregroundShare: `${(100 * foreground / result.mask.length).toFixed(1)}%`
+                    }, null, 4);
+                } catch (e) {
+                    const message = ailiaU2net.getErrorDetail(e);
+                    console.log(e);
+                    console.error(message);
+                    setStatus(`Error while running the model: ${message}`, 'error');
+                }
+            }
+
+            setupSampleImageRunButton(processImage);
+            setupVideoStreamRunButton(processImage);
+        }
+    </script>
+</head>
+
+<body>
+    <div class="page page--wide">
+
+        <header class="site-header">
+            <a class="back-link" href="../">&larr; ailia.js Demo</a>
+            <h1>U&sup2;-Net</h1>
+            <p class="tagline">Background removal running in your browser with WebAssembly.</p>
+        </header>
+
+        <p class="status-container">Checking the model files</p>
+
+        <div class="controls">
+            <button class="singleImageButton">Run with sample image</button>
+            <button class="videoStreamButton">Run with camera</button>
+        </div>
+
+        <div class="io-container">
+            <div class="input-container">
+                <h2>Sample image (click to change)</h2>
+                <img class="sample-image" src='../images/sample-image.jpg'></img>
+            </div>
+            <div class="output-container">
+                <h2>Background removed</h2>
+                <div class="result-container"></div>
+                <h2>Saliency mask</h2>
+                <canvas class="mask-canvas"></canvas>
+                <p class="result-json"></p>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
