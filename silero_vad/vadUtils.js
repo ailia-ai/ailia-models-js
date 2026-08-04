@@ -120,60 +120,131 @@ export function computeSpeechProbabilities(vad, samples) {
 }
 
 /**
- * Turns per window probabilities into speech segments, following the hysteresis
- * that get_speech_timestamps uses: a segment opens above the threshold and only
- * closes once the probability has stayed below threshold - 0.15 for long enough.
- * Segments shorter than the minimum are dropped, and the rest are padded.
+ * Turns a stream of per window probabilities into speech segments.
+ *
+ * Follows the hysteresis that get_speech_timestamps uses: a segment opens above
+ * the threshold and only closes once the probability has stayed below
+ * threshold - 0.15 for long enough. Segments shorter than the minimum are
+ * dropped, and the rest are padded without reaching into the one before.
+ *
+ * Probabilities are pushed one at a time, so the same code serves the recording
+ * path, which needs each segment as soon as it closes, and a whole signal.
+ */
+export class SpeechSegmenter {
+    constructor() {
+        this.minSpeech = SAMPLE_RATE * MIN_SPEECH_MS / 1000;
+        this.minSilence = SAMPLE_RATE * MIN_SILENCE_MS / 1000;
+        this.pad = SAMPLE_RATE * SPEECH_PAD_MS / 1000;
+        this.reset();
+    }
+
+    reset() {
+        this.frame = 0;
+        this.inSpeech = false;
+        this.start = 0;
+        this.silenceStart = 0;
+        // Padding is held back from the previous segment's unpadded end
+        this.previousEnd = 0;
+    }
+
+    /**
+     * The segment being spoken right now, so it can be shown before it closes.
+     * @returns {{start: number, end: number}|null}
+     */
+    get openSegment() {
+        return this.inSpeech ? { start: this.start, end: this.frame * WINDOW_SAMPLES } : null;
+    }
+
+    /**
+     * @param {number} probability for the next window
+     * @returns {{start: number, end: number}|null} a segment, if one just closed
+     */
+    push(probability) {
+        const position = this.frame * WINDOW_SAMPLES;
+        this.frame++;
+
+        if (probability >= SPEECH_THRESHOLD) {
+            this.silenceStart = 0;
+            if (!this.inSpeech) {
+                this.inSpeech = true;
+                this.start = position;
+            }
+            return null;
+        }
+
+        if (!this.inSpeech || probability >= SILENCE_THRESHOLD) {
+            return null;
+        }
+
+        if (!this.silenceStart) {
+            this.silenceStart = position;
+        }
+        if (position - this.silenceStart < this.minSilence) {
+            return null;
+        }
+
+        const end = this.silenceStart;
+        const start = this.start;
+        this.inSpeech = false;
+        this.silenceStart = 0;
+
+        // The silence just waited out is longer than the padding, so `position`
+        // is always a safe limit for it
+        return end - start > this.minSpeech ? this._pad(start, end, position) : null;
+    }
+
+    /**
+     * Closes a segment still open at the end of the signal.
+     *
+     * @param {number} totalSamples
+     * @returns {{start: number, end: number}|null}
+     */
+    flush(totalSamples) {
+        if (!this.inSpeech) {
+            return null;
+        }
+
+        const start = this.start;
+        this.inSpeech = false;
+
+        return totalSamples - start > this.minSpeech ? this._pad(start, totalSamples, totalSamples) : null;
+    }
+
+    _pad(start, end, limit) {
+        const padded = {
+            start: Math.max(this.previousEnd, start - this.pad),
+            end: Math.min(limit, end + this.pad)
+        };
+        this.previousEnd = end;
+
+        return padded;
+    }
+}
+
+/**
+ * Runs the segmenter over a whole set of probabilities.
  *
  * @param {Float32Array} probabilities
  * @param {number} totalSamples length of the signal, to clamp the padding
  * @returns {{start: number, end: number}[]} sample offsets
  */
 export function findSpeechSegments(probabilities, totalSamples) {
-    const minSpeech = SAMPLE_RATE * MIN_SPEECH_MS / 1000;
-    const minSilence = SAMPLE_RATE * MIN_SILENCE_MS / 1000;
-    const pad = SAMPLE_RATE * SPEECH_PAD_MS / 1000;
-
+    const segmenter = new SpeechSegmenter();
     const segments = [];
-    let start = 0;
-    let silenceStart = 0;
-    let inSpeech = false;
 
-    probabilities.forEach((probability, frame) => {
-        const position = frame * WINDOW_SAMPLES;
-
-        if (probability >= SPEECH_THRESHOLD) {
-            silenceStart = 0;
-            if (!inSpeech) {
-                inSpeech = true;
-                start = position;
-            }
-            return;
+    for (const probability of probabilities) {
+        const segment = segmenter.push(probability);
+        if (segment) {
+            segments.push(segment);
         }
-
-        if (inSpeech && probability < SILENCE_THRESHOLD) {
-            if (!silenceStart) {
-                silenceStart = position;
-            }
-            if (position - silenceStart >= minSilence) {
-                if (silenceStart - start > minSpeech) {
-                    segments.push({ start, end: silenceStart });
-                }
-                inSpeech = false;
-                silenceStart = 0;
-            }
-        }
-    });
-
-    if (inSpeech && totalSamples - start > minSpeech) {
-        segments.push({ start, end: totalSamples });
     }
 
-    // Pad each segment, then keep them from overlapping or leaving the signal
-    return segments.map((segment, i) => ({
-        start: Math.max(i === 0 ? 0 : segments[i - 1].end, segment.start - pad),
-        end: Math.min(totalSamples, segment.end + pad)
-    }));
+    const last = segmenter.flush(totalSamples);
+    if (last) {
+        segments.push(last);
+    }
+
+    return segments;
 }
 
 /**

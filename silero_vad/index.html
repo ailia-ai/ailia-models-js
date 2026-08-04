@@ -10,13 +10,20 @@
     <script type='module'>
         import { Ailia } from '../ailia-js/ailia.js';
         import { setStatus, createAiliaWithModel } from '../common/demoUtils.js';
-        import { SileroVad, SAMPLE_RATE, WINDOW_SAMPLES, computeSpeechProbabilities, findSpeechSegments, collectSegments } from './vadUtils.js';
+        import { SileroVad, SAMPLE_RATE, WINDOW_SAMPLES, SpeechSegmenter, computeSpeechProbabilities, findSpeechSegments, collectSegments } from './vadUtils.js';
         import { drawWaveform, play } from './waveform.js';
 
         // ScriptProcessorNode wants a power of two, and 1024 divides cleanly into
         // the model's 256 sample windows
         const CAPTURE_BUFFER_SAMPLES = 1024;
         const MAX_RECORDING_SECONDS = 30;
+        // How much of the recording the live view shows. Holding the time scale
+        // fixed makes the trace scroll instead of squeezing as the buffer fills.
+        const LIVE_WINDOW_SECONDS = 8;
+        // Redraw interval while recording. A timer is used rather than the animation
+        // frame callback, which stops firing whenever the page is not being rendered
+        // and would leave the trace and the status frozen.
+        const LIVE_REDRAW_MS = 40;
 
         if (document.readyState === 'complete') { // Safari
             onload();
@@ -44,28 +51,27 @@
             const sampleButton = document.querySelector('.sampleAudioButton');
             const micButton = document.querySelector('.microphoneButton');
 
-            let recording = null;
+            // null when idle, otherwise the function that tears the capture down
+            let stopCapture = null;
+            let startingCapture = false;
 
-            function showResult(samples, probabilities, segments) {
-                drawWaveform(waveformCanvas, samples, segments);
+            function appendSegment(samples, segment, index) {
+                const seconds = at => (at / SAMPLE_RATE).toFixed(2);
+                const item = document.createElement('li');
+                item.innerHTML = `<button class="segment-play">Play</button> ` +
+                    `segment ${index}: ${seconds(segment.start)}s &ndash; ${seconds(segment.end)}s ` +
+                    `(${seconds(segment.end - segment.start)}s)`;
+                item.querySelector('.segment-play').addEventListener('click', () =>
+                    play(samples.slice(segment.start, segment.end), SAMPLE_RATE));
+                segmentList.appendChild(item);
+            }
 
-                segmentList.innerHTML = '';
-                segments.forEach((segment, i) => {
-                    const seconds = from => (from / SAMPLE_RATE).toFixed(2);
-                    const item = document.createElement('li');
-                    item.innerHTML = `<button class="segment-play">Play</button> ` +
-                        `segment ${i + 1}: ${seconds(segment.start)}s &ndash; ${seconds(segment.end)}s ` +
-                        `(${seconds(segment.end - segment.start)}s)`;
-                    item.querySelector('.segment-play').addEventListener('click', () =>
-                        play(samples.slice(segment.start, segment.end), SAMPLE_RATE));
-                    segmentList.appendChild(item);
-                });
-
+            function summarize(samples, windowCount, segments) {
                 const speechSamples = segments.reduce((sum, s) => sum + (s.end - s.start), 0);
                 resultJson.innerText = JSON.stringify({
                     sampleRate: SAMPLE_RATE,
                     durationSeconds: +(samples.length / SAMPLE_RATE).toFixed(2),
-                    windows: probabilities.length,
+                    windows: windowCount,
                     speechSegments: segments.length,
                     speechSeconds: +(speechSamples / SAMPLE_RATE).toFixed(2),
                     speechShare: `${(100 * speechSamples / Math.max(1, samples.length)).toFixed(1)}%`
@@ -74,6 +80,13 @@
                 const cutButton = document.querySelector('.cutButton');
                 cutButton.disabled = segments.length === 0;
                 cutButton.onclick = () => play(collectSegments(segments, samples), SAMPLE_RATE);
+            }
+
+            function showResult(samples, windowCount, segments) {
+                drawWaveform(waveformCanvas, samples, segments);
+                segmentList.innerHTML = '';
+                segments.forEach((segment, i) => appendSegment(samples, segment, i + 1));
+                summarize(samples, windowCount, segments);
             }
 
             async function runOnSampleAudio() {
@@ -91,7 +104,7 @@
                     const segments = findSpeechSegments(probabilities, samples.length);
 
                     setStatus('The model has finished running ' + (endTime.getTime() - startTime.getTime()) + 'ms');
-                    showResult(samples, probabilities, segments);
+                    showResult(samples, probabilities.length, segments);
                 } catch (e) {
                     console.error(e);
                     setStatus(`Error while running the model: ${e.message}`, 'error');
@@ -104,24 +117,57 @@
                     return;
                 }
 
+                startingCapture = true;
                 let stream;
                 try {
                     stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 } catch (error) {
+                    startingCapture = false;
                     setStatus(`Failed to acquire the microphone: ${error.message}`, 'error');
                     return;
                 }
+                startingCapture = false;
 
                 const context = new AudioContext({ sampleRate: SAMPLE_RATE });
+                // A context created before a gesture can start suspended, and then
+                // no audio would ever be delivered
+                await context.resume();
+
                 const source = context.createMediaStreamSource(stream);
                 const processor = context.createScriptProcessor(CAPTURE_BUFFER_SAMPLES, 1, 1);
 
                 const captured = new Float32Array(SAMPLE_RATE * MAX_RECORDING_SECONDS);
+                const liveWindow = SAMPLE_RATE * LIVE_WINDOW_SECONDS;
+                const segmenter = new SpeechSegmenter();
+                const segments = [];
                 let capturedLength = 0;
-                const probabilities = [];
+                let windowCount = 0;
                 let pending = new Float32Array(0);
+                let speaking = false;
+                let redraw = 0;
 
                 vad.reset();
+                segmentList.innerHTML = '';
+                resultJson.innerText = '';
+                document.querySelector('.cutButton').disabled = true;
+
+                // Drawing is driven by a timer rather than by the audio callback, so
+                // the trace advances smoothly however the buffers land
+                const drawLive = () => {
+                    const from = Math.max(0, capturedLength - liveWindow);
+                    const open = segmenter.openSegment;
+                    const visible = (open ? segments.concat(open) : segments)
+                        .map(segment => ({ start: segment.start - from, end: segment.end - from }))
+                        .filter(segment => segment.end > 0);
+
+                    drawWaveform(waveformCanvas, captured.subarray(from, capturedLength), visible, liveWindow);
+
+                    setStatus(`Recording ${(capturedLength / SAMPLE_RATE).toFixed(1)}s of ` +
+                        `${MAX_RECORDING_SECONDS}s \u2014 ${speaking ? 'speech' : 'silence'}`);
+
+                };
+                drawLive();
+                redraw = setInterval(drawLive, LIVE_REDRAW_MS);
 
                 processor.onaudioprocess = event => {
                     const input = event.inputBuffer.getChannelData(0);
@@ -142,18 +188,23 @@
 
                     let offset = 0;
                     while (offset + WINDOW_SAMPLES <= merged.length) {
-                        probabilities.push(vad.process(merged.subarray(offset, offset + WINDOW_SAMPLES)));
+                        const probability = vad.process(merged.subarray(offset, offset + WINDOW_SAMPLES));
+                        speaking = probability >= 0.5;
+                        windowCount++;
+
+                        // A segment that has run long enough to survive the minimum
+                        // duration is cut out as soon as it closes, without waiting
+                        // for the recording to end
+                        const segment = segmenter.push(probability);
+                        if (segment) {
+                            segments.push(segment);
+                            appendSegment(captured, segment, segments.length);
+                            summarize(captured.subarray(0, capturedLength), windowCount, segments);
+                        }
+
                         offset += WINDOW_SAMPLES;
                     }
                     pending = merged.slice(offset);
-
-                    const samples = captured.subarray(0, capturedLength);
-                    const live = findSpeechSegments(Float32Array.from(probabilities), capturedLength);
-                    drawWaveform(waveformCanvas, samples, live, captured.length);
-
-                    const speaking = probabilities[probabilities.length - 1] >= 0.5;
-                    setStatus(`Recording ${(capturedLength / SAMPLE_RATE).toFixed(1)}s of ` +
-                        `${MAX_RECORDING_SECONDS}s — ${speaking ? 'speech' : 'silence'}`);
                 };
 
                 source.connect(processor);
@@ -164,7 +215,8 @@
                 processor.connect(mute);
                 mute.connect(context.destination);
 
-                recording = () => {
+                stopCapture = () => {
+                    clearInterval(redraw);
                     processor.onaudioprocess = null;
                     processor.disconnect();
                     source.disconnect();
@@ -173,23 +225,30 @@
                     context.close();
 
                     const samples = captured.slice(0, capturedLength);
-                    const probs = Float32Array.from(probabilities);
-                    const segments = findSpeechSegments(probs, samples.length);
-                    setStatus(`Recorded ${(capturedLength / SAMPLE_RATE).toFixed(1)}s`);
-                    showResult(samples, probs, segments);
+                    const last = segmenter.flush(samples.length);
+                    if (last) {
+                        segments.push(last);
+                        appendSegment(samples, last, segments.length);
+                    }
+
+                    // Rebind the play buttons to the trimmed copy and redraw the
+                    // whole recording rather than the live window
+                    showResult(samples, windowCount, segments);
+                    setStatus(`Stopped. Recorded ${(capturedLength / SAMPLE_RATE).toFixed(1)}s, ` +
+                        `${segments.length} speech segment${segments.length === 1 ? '' : 's'}`);
                 };
 
                 micButton.innerText = 'Stop recording';
-                setStatus('Recording');
             }
 
             function stopRecording() {
-                if (recording) {
-                    const stop = recording;
-                    recording = null;
-                    micButton.innerText = 'Record from microphone';
-                    stop();
+                if (!stopCapture) {
+                    return;
                 }
+                const stop = stopCapture;
+                stopCapture = null;
+                micButton.innerText = 'Record from microphone';
+                stop();
             }
 
             sampleButton.addEventListener('click', () => {
@@ -198,9 +257,9 @@
             });
 
             micButton.addEventListener('click', () => {
-                if (recording) {
+                if (stopCapture) {
                     stopRecording();
-                } else {
+                } else if (!startingCapture) {
                     startRecording();
                 }
             });
