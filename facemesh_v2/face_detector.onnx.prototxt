@@ -1,0 +1,2365 @@
+ir_version: 6
+producer_name: "tf2onnx"
+producer_version: "1.15.0 6d6b6c"
+model_version: 0
+graph {
+  name: "tf2onnx"
+  node {
+    input: "input"
+    output: "conv2d__48:0"
+    name: "conv2d__48"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 3
+      ints: 1
+      ints: 2
+      type: INTS
+    }
+  }
+  node {
+    input: "conv2d__48:0"
+    input: "const_fold_opt__457"
+    input: "const_fold_opt__326"
+    output: "conv2d"
+    name: "conv2d"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 5
+      ints: 5
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "conv2d"
+    output: "activation"
+    name: "activation"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation"
+    input: "const_fold_opt__438"
+    input: "const_fold_opt__351"
+    output: "depthwise_conv2d"
+    name: "depthwise_conv2d"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 24
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d"
+    input: "const_fold_opt__460"
+    input: "const_fold_opt__340"
+    output: "conv2d_1"
+    name: "conv2d_1"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "activation"
+    input: "conv2d_1"
+    output: "add__xeno_compat__1"
+    name: "add__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add__xeno_compat__1"
+    output: "activation_1"
+    name: "activation_1"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_1"
+    input: "const_fold_opt__469"
+    input: "const_fold_opt__351"
+    output: "depthwise_conv2d_1"
+    name: "depthwise_conv2d_1"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 24
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d_1"
+    input: "const_fold_opt__468"
+    input: "const_fold_opt__434"
+    output: "conv2d_2"
+    name: "conv2d_2"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "activation_1"
+    input: "pad_const__67"
+    output: "channel_padding"
+    name: "channel_padding"
+    op_type: "Pad"
+  }
+  node {
+    input: "channel_padding"
+    input: "conv2d_2"
+    output: "add_1__xeno_compat__1"
+    name: "add_1__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add_1__xeno_compat__1"
+    output: "activation_2"
+    name: "activation_2"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_2"
+    output: "max_pooling2d"
+    name: "max_pooling2d"
+    op_type: "MaxPool"
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "max_pooling2d"
+    input: "pad_const__67"
+    output: "channel_padding_1"
+    name: "channel_padding_1"
+    op_type: "Pad"
+  }
+  node {
+    input: "activation_2"
+    input: "const_fold_opt__421"
+    input: "const_fold_opt__426"
+    output: "depthwise_conv2d_2"
+    name: "depthwise_conv2d_2"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 28
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d_2"
+    input: "const_fold_opt__428"
+    input: "const_fold_opt__364"
+    output: "conv2d_3"
+    name: "conv2d_3"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "channel_padding_1"
+    input: "conv2d_3"
+    output: "add_2__xeno_compat__1"
+    name: "add_2__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add_2__xeno_compat__1"
+    output: "activation_3"
+    name: "activation_3"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_3"
+    input: "const_fold_opt__419"
+    input: "const_fold_opt__463"
+    output: "depthwise_conv2d_3"
+    name: "depthwise_conv2d_3"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 32
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d_3"
+    input: "const_fold_opt__424"
+    input: "const_fold_opt__356"
+    output: "conv2d_4"
+    name: "conv2d_4"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "activation_3"
+    input: "pad_const__67"
+    output: "channel_padding_2"
+    name: "channel_padding_2"
+    op_type: "Pad"
+  }
+  node {
+    input: "channel_padding_2"
+    input: "conv2d_4"
+    output: "add_3__xeno_compat__1"
+    name: "add_3__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add_3__xeno_compat__1"
+    output: "activation_4"
+    name: "activation_4"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_4"
+    input: "const_fold_opt__462"
+    input: "const_fold_opt__412"
+    output: "depthwise_conv2d_4"
+    name: "depthwise_conv2d_4"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 36
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d_4"
+    input: "const_fold_opt__416"
+    input: "const_fold_opt__346"
+    output: "conv2d_5"
+    name: "conv2d_5"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "activation_4"
+    input: "pad_const__96"
+    output: "channel_padding_3"
+    name: "channel_padding_3"
+    op_type: "Pad"
+  }
+  node {
+    input: "channel_padding_3"
+    input: "conv2d_5"
+    output: "add_4__xeno_compat__1"
+    name: "add_4__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add_4__xeno_compat__1"
+    output: "activation_5"
+    name: "activation_5"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_5"
+    output: "max_pooling2d_1"
+    name: "max_pooling2d_1"
+    op_type: "MaxPool"
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "max_pooling2d_1"
+    input: "pad_const__96"
+    output: "channel_padding_4"
+    name: "channel_padding_4"
+    op_type: "Pad"
+  }
+  node {
+    input: "activation_5"
+    input: "const_fold_opt__441"
+    input: "const_fold_opt__324"
+    output: "depthwise_conv2d_5"
+    name: "depthwise_conv2d_5"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 42
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d_5"
+    input: "const_fold_opt__411"
+    input: "const_fold_opt__337"
+    output: "conv2d_6"
+    name: "conv2d_6"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "channel_padding_4"
+    input: "conv2d_6"
+    output: "add_5__xeno_compat__1"
+    name: "add_5__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add_5__xeno_compat__1"
+    output: "activation_6"
+    name: "activation_6"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_6"
+    input: "const_fold_opt__472"
+    input: "const_fold_opt__394"
+    output: "depthwise_conv2d_6"
+    name: "depthwise_conv2d_6"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 48
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d_6"
+    input: "const_fold_opt__405"
+    input: "const_fold_opt__328"
+    output: "conv2d_7"
+    name: "conv2d_7"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "activation_6"
+    input: "pad_const__134"
+    output: "channel_padding_5"
+    name: "channel_padding_5"
+    op_type: "Pad"
+  }
+  node {
+    input: "channel_padding_5"
+    input: "conv2d_7"
+    output: "add_6__xeno_compat__1"
+    name: "add_6__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add_6__xeno_compat__1"
+    output: "activation_7"
+    name: "activation_7"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_7"
+    input: "const_fold_opt__453"
+    input: "const_fold_opt__444"
+    output: "depthwise_conv2d_7"
+    name: "depthwise_conv2d_7"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 56
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d_7"
+    input: "const_fold_opt__479"
+    input: "const_fold_opt__414"
+    output: "conv2d_8"
+    name: "conv2d_8"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "activation_7"
+    input: "pad_const__134"
+    output: "channel_padding_6"
+    name: "channel_padding_6"
+    op_type: "Pad"
+  }
+  node {
+    input: "channel_padding_6"
+    input: "conv2d_8"
+    output: "add_7__xeno_compat__1"
+    name: "add_7__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add_7__xeno_compat__1"
+    output: "activation_8"
+    name: "activation_8"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_8"
+    input: "const_fold_opt__451"
+    input: "const_fold_opt__376"
+    output: "depthwise_conv2d_8"
+    name: "depthwise_conv2d_8"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 64
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d_8"
+    input: "const_fold_opt__372"
+    input: "const_fold_opt__323"
+    output: "conv2d_9"
+    name: "conv2d_9"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "activation_8"
+    input: "pad_const__134"
+    output: "channel_padding_7"
+    name: "channel_padding_7"
+    op_type: "Pad"
+  }
+  node {
+    input: "channel_padding_7"
+    input: "conv2d_9"
+    output: "add_8__xeno_compat__1"
+    name: "add_8__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add_8__xeno_compat__1"
+    output: "activation_9"
+    name: "activation_9"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_9"
+    input: "const_fold_opt__478"
+    input: "const_fold_opt__392"
+    output: "depthwise_conv2d_9"
+    name: "depthwise_conv2d_9"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 72
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d_9"
+    input: "const_fold_opt__371"
+    input: "const_fold_opt__321"
+    output: "conv2d_10"
+    name: "conv2d_10"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "activation_9"
+    input: "pad_const__134"
+    output: "channel_padding_8"
+    name: "channel_padding_8"
+    op_type: "Pad"
+  }
+  node {
+    input: "channel_padding_8"
+    input: "conv2d_10"
+    output: "add_9__xeno_compat__1"
+    name: "add_9__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add_9__xeno_compat__1"
+    output: "activation_10"
+    name: "activation_10"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_10"
+    input: "const_fold_opt__487"
+    input: "const_fold_opt__410"
+    output: "depthwise_conv2d_10"
+    name: "depthwise_conv2d_10"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 80
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d_10"
+    input: "const_fold_opt__357"
+    input: "const_fold_opt__362"
+    output: "conv2d_11"
+    name: "conv2d_11"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "activation_10"
+    input: "pad_const__134"
+    output: "channel_padding_9"
+    name: "channel_padding_9"
+    op_type: "Pad"
+  }
+  node {
+    input: "channel_padding_9"
+    input: "conv2d_11"
+    output: "add_10__xeno_compat__1"
+    name: "add_10__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add_10__xeno_compat__1"
+    output: "activation_11"
+    name: "activation_11"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_11"
+    input: "const_fold_opt__429"
+    input: "const_fold_opt__369"
+    output: "regressor_8"
+    name: "regressor_8"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "regressor_8"
+    output: "regressor_8__155:0"
+    name: "regressor_8__155"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "regressor_8__155:0"
+    input: "const_fold_opt__374"
+    output: "reshape_1"
+    name: "reshape_1"
+    op_type: "Reshape"
+  }
+  node {
+    input: "activation_11"
+    output: "max_pooling2d_2"
+    name: "max_pooling2d_2"
+    op_type: "MaxPool"
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+  }
+  node {
+    input: "max_pooling2d_2"
+    input: "pad_const__134"
+    output: "channel_padding_10"
+    name: "channel_padding_10"
+    op_type: "Pad"
+  }
+  node {
+    input: "activation_11"
+    input: "const_fold_opt__447"
+    input: "const_fold_opt__437"
+    output: "depthwise_conv2d_11"
+    name: "depthwise_conv2d_11"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 2
+      ints: 2
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 88
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d_11"
+    input: "const_fold_opt__456"
+    input: "const_fold_opt__422"
+    output: "conv2d_12"
+    name: "conv2d_12"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "channel_padding_10"
+    input: "conv2d_12"
+    output: "add_11__xeno_compat__1"
+    name: "add_11__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add_11__xeno_compat__1"
+    output: "activation_12"
+    name: "activation_12"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_12"
+    input: "const_fold_opt__475"
+    input: "const_fold_opt__384"
+    output: "depthwise_conv2d_12"
+    name: "depthwise_conv2d_12"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 96
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d_12"
+    input: "const_fold_opt__484"
+    input: "const_fold_opt__401"
+    output: "conv2d_13"
+    name: "conv2d_13"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "activation_12"
+    input: "conv2d_13"
+    output: "add_12__xeno_compat__1"
+    name: "add_12__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add_12__xeno_compat__1"
+    output: "activation_13"
+    name: "activation_13"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_13"
+    input: "const_fold_opt__442"
+    input: "const_fold_opt__384"
+    output: "depthwise_conv2d_13"
+    name: "depthwise_conv2d_13"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 96
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d_13"
+    input: "const_fold_opt__425"
+    input: "const_fold_opt__393"
+    output: "conv2d_14"
+    name: "conv2d_14"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "activation_13"
+    input: "conv2d_14"
+    output: "add_13__xeno_compat__1"
+    name: "add_13__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add_13__xeno_compat__1"
+    output: "activation_14"
+    name: "activation_14"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_14"
+    input: "const_fold_opt__473"
+    input: "const_fold_opt__384"
+    output: "depthwise_conv2d_14"
+    name: "depthwise_conv2d_14"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 96
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d_14"
+    input: "const_fold_opt__388"
+    input: "const_fold_opt__391"
+    output: "conv2d_15"
+    name: "conv2d_15"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "activation_14"
+    input: "conv2d_15"
+    output: "add_14__xeno_compat__1"
+    name: "add_14__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add_14__xeno_compat__1"
+    output: "activation_15"
+    name: "activation_15"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_15"
+    input: "const_fold_opt__482"
+    input: "const_fold_opt__384"
+    output: "depthwise_conv2d_15"
+    name: "depthwise_conv2d_15"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 3
+      ints: 3
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 96
+      type: INT
+    }
+    attribute {
+      name: "pads"
+      ints: 1
+      ints: 1
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "depthwise_conv2d_15"
+    input: "const_fold_opt__378"
+    input: "const_fold_opt__382"
+    output: "conv2d_16"
+    name: "conv2d_16"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "activation_15"
+    input: "conv2d_16"
+    output: "add_15__xeno_compat__1"
+    name: "add_15__xeno_compat__1"
+    op_type: "Add"
+  }
+  node {
+    input: "add_15__xeno_compat__1"
+    output: "activation_16"
+    name: "activation_16"
+    op_type: "Relu"
+  }
+  node {
+    input: "activation_16"
+    input: "const_fold_opt__325"
+    input: "const_fold_opt__331"
+    output: "regressor_16"
+    name: "regressor_16"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "regressor_16"
+    output: "regressor_16__202:0"
+    name: "regressor_16__202"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "regressor_16__202:0"
+    input: "const_fold_opt__374"
+    output: "reshape_3"
+    name: "reshape_3"
+    op_type: "Reshape"
+  }
+  node {
+    input: "reshape_1"
+    input: "reshape_3"
+    output: "regressors"
+    name: "regressors"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 1
+      type: INT
+    }
+    domain: ""
+  }
+  node {
+    input: "activation_16"
+    input: "const_fold_opt__413"
+    input: "const_fold_opt__342"
+    output: "classificator_16"
+    name: "classificator_16"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "classificator_16"
+    output: "classificator_16__206:0"
+    name: "classificator_16__206"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "classificator_16__206:0"
+    input: "const_fold_opt__383"
+    output: "reshape_2"
+    name: "reshape_2"
+    op_type: "Reshape"
+  }
+  node {
+    input: "activation_11"
+    input: "const_fold_opt__459"
+    input: "const_fold_opt__335"
+    output: "classificator_8"
+    name: "classificator_8"
+    op_type: "Conv"
+    attribute {
+      name: "strides"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "dilations"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "kernel_shape"
+      ints: 1
+      ints: 1
+      type: INTS
+    }
+    attribute {
+      name: "pads"
+      ints: 0
+      ints: 0
+      ints: 0
+      ints: 0
+      type: INTS
+    }
+    attribute {
+      name: "group"
+      i: 1
+      type: INT
+    }
+  }
+  node {
+    input: "classificator_8"
+    output: "classificator_8__210:0"
+    name: "classificator_8__210"
+    op_type: "Transpose"
+    attribute {
+      name: "perm"
+      ints: 0
+      ints: 2
+      ints: 3
+      ints: 1
+      type: INTS
+    }
+  }
+  node {
+    input: "classificator_8__210:0"
+    input: "const_fold_opt__383"
+    output: "reshape"
+    name: "reshape"
+    op_type: "Reshape"
+  }
+  node {
+    input: "reshape"
+    input: "reshape_2"
+    output: "classificators"
+    name: "classificators"
+    op_type: "Concat"
+    attribute {
+      name: "axis"
+      i: 1
+      type: INT
+    }
+    domain: ""
+  }
+  initializer {
+      dims: 8
+      data_type: 7
+      name: "pad_const__96"
+  }
+  initializer {
+      dims: 8
+      data_type: 7
+      name: "pad_const__67"
+  }
+  initializer {
+      dims: 8
+      data_type: 7
+      name: "pad_const__134"
+  }
+  initializer {
+      dims: 80
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__487"
+  }
+  initializer {
+      dims: 96
+      dims: 96
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__484"
+  }
+  initializer {
+      dims: 96
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__482"
+  }
+  initializer {
+      dims: 64
+      dims: 56
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__479"
+  }
+  initializer {
+      dims: 72
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__478"
+  }
+  initializer {
+      dims: 96
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__475"
+  }
+  initializer {
+      dims: 96
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__473"
+  }
+  initializer {
+      dims: 48
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__472"
+  }
+  initializer {
+      dims: 24
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__469"
+  }
+  initializer {
+      dims: 28
+      dims: 24
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__468"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "const_fold_opt__463"
+  }
+  initializer {
+      dims: 36
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__462"
+  }
+  initializer {
+      dims: 24
+      dims: 24
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__460"
+  }
+  initializer {
+      dims: 2
+      dims: 88
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__459"
+  }
+  initializer {
+      dims: 24
+      dims: 3
+      dims: 5
+      dims: 5
+      data_type: 1
+      name: "const_fold_opt__457"
+  }
+  initializer {
+      dims: 96
+      dims: 88
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__456"
+  }
+  initializer {
+      dims: 56
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__453"
+  }
+  initializer {
+      dims: 64
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__451"
+  }
+  initializer {
+      dims: 88
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__447"
+  }
+  initializer {
+      dims: 56
+      data_type: 1
+      name: "const_fold_opt__444"
+  }
+  initializer {
+      dims: 96
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__442"
+  }
+  initializer {
+      dims: 42
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__441"
+  }
+  initializer {
+      dims: 24
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__438"
+  }
+  initializer {
+      dims: 88
+      data_type: 1
+      name: "const_fold_opt__437"
+  }
+  initializer {
+      dims: 28
+      data_type: 1
+      name: "const_fold_opt__434"
+  }
+  initializer {
+      dims: 32
+      dims: 88
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__429"
+  }
+  initializer {
+      dims: 32
+      dims: 28
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__428"
+  }
+  initializer {
+      dims: 28
+      data_type: 1
+      name: "const_fold_opt__426"
+  }
+  initializer {
+      dims: 96
+      dims: 96
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__425"
+  }
+  initializer {
+      dims: 36
+      dims: 32
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__424"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "const_fold_opt__422"
+  }
+  initializer {
+      dims: 28
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__421"
+  }
+  initializer {
+      dims: 32
+      dims: 1
+      dims: 3
+      dims: 3
+      data_type: 1
+      name: "const_fold_opt__419"
+  }
+  initializer {
+      dims: 42
+      dims: 36
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__416"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "const_fold_opt__414"
+  }
+  initializer {
+      dims: 6
+      dims: 96
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__413"
+  }
+  initializer {
+      dims: 36
+      data_type: 1
+      name: "const_fold_opt__412"
+  }
+  initializer {
+      dims: 48
+      dims: 42
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__411"
+  }
+  initializer {
+      dims: 80
+      data_type: 1
+      name: "const_fold_opt__410"
+  }
+  initializer {
+      dims: 56
+      dims: 48
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__405"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "const_fold_opt__401"
+  }
+  initializer {
+      dims: 48
+      data_type: 1
+      name: "const_fold_opt__394"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "const_fold_opt__393"
+  }
+  initializer {
+      dims: 72
+      data_type: 1
+      name: "const_fold_opt__392"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "const_fold_opt__391"
+  }
+  initializer {
+      dims: 96
+      dims: 96
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__388"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "const_fold_opt__384"
+  }
+  initializer {
+      dims: 3
+      data_type: 7
+      name: "const_fold_opt__383"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "const_fold_opt__382"
+  }
+  initializer {
+      dims: 96
+      dims: 96
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__378"
+  }
+  initializer {
+      dims: 64
+      data_type: 1
+      name: "const_fold_opt__376"
+  }
+  initializer {
+      dims: 3
+      data_type: 7
+      name: "const_fold_opt__374"
+  }
+  initializer {
+      dims: 72
+      dims: 64
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__372"
+  }
+  initializer {
+      dims: 80
+      dims: 72
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__371"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "const_fold_opt__369"
+  }
+  initializer {
+      dims: 32
+      data_type: 1
+      name: "const_fold_opt__364"
+  }
+  initializer {
+      dims: 88
+      data_type: 1
+      name: "const_fold_opt__362"
+  }
+  initializer {
+      dims: 88
+      dims: 80
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__357"
+  }
+  initializer {
+      dims: 36
+      data_type: 1
+      name: "const_fold_opt__356"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "const_fold_opt__351"
+  }
+  initializer {
+      dims: 42
+      data_type: 1
+      name: "const_fold_opt__346"
+  }
+  initializer {
+      dims: 6
+      data_type: 1
+      name: "const_fold_opt__342"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "const_fold_opt__340"
+  }
+  initializer {
+      dims: 48
+      data_type: 1
+      name: "const_fold_opt__337"
+  }
+  initializer {
+      dims: 2
+      data_type: 1
+      name: "const_fold_opt__335"
+  }
+  initializer {
+      dims: 96
+      data_type: 1
+      name: "const_fold_opt__331"
+  }
+  initializer {
+      dims: 56
+      data_type: 1
+      name: "const_fold_opt__328"
+  }
+  initializer {
+      dims: 24
+      data_type: 1
+      name: "const_fold_opt__326"
+  }
+  initializer {
+      dims: 96
+      dims: 96
+      dims: 1
+      dims: 1
+      data_type: 1
+      name: "const_fold_opt__325"
+  }
+  initializer {
+      dims: 42
+      data_type: 1
+      name: "const_fold_opt__324"
+  }
+  initializer {
+      dims: 72
+      data_type: 1
+      name: "const_fold_opt__323"
+  }
+  initializer {
+      dims: 80
+      data_type: 1
+      name: "const_fold_opt__321"
+  }
+  input {
+    name: "input"
+    type {
+      tensor_type {
+        elem_type: 1
+        shape {
+          dim {
+            dim_value: 1
+          }
+          dim {
+            dim_value: 128
+          }
+          dim {
+            dim_value: 128
+          }
+          dim {
+            dim_value: 3
+          }
+        }
+      }
+    }
+  }
+  output {
+    name: "regressors"
+    type {
+      tensor_type {
+        elem_type: 1
+        shape {
+          dim {
+            dim_value: 1
+          }
+          dim {
+            dim_value: 896
+          }
+          dim {
+            dim_value: 16
+          }
+        }
+      }
+    }
+  }
+  output {
+    name: "classificators"
+    type {
+      tensor_type {
+        elem_type: 1
+        shape {
+          dim {
+            dim_value: 1
+          }
+          dim {
+            dim_value: 896
+          }
+          dim {
+            dim_value: 1
+          }
+        }
+      }
+    }
+  }
+}
+opset_import {
+  domain: ""
+  version: 11
+}

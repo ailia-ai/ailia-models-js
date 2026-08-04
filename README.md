@@ -16,11 +16,14 @@ Demos in this repository
 | Demo | Task | Model files |
 | --- | --- | --- |
 | [`blazeface/`](blazeface/) | Face detection | `blazeface.onnx` |
+| [`facemesh_v2/`](facemesh_v2/) | 478 point face mesh | `face_detector.onnx`, `face_landmarks_detector.onnx` |
 | [`blazehand/`](blazehand/) | Hand landmark detection | `blazepalm.onnx`, `blazehand.onnx` |
 | [`mobilenet_ssd/`](mobilenet_ssd/) | Object detection (20 VOC categories) | `mb2-ssd-lite.onnx` |
 | [`yolox/`](yolox/) | Object detection (80 COCO categories) | `yolox_tiny.onnx` |
 
 Each demo runs on a bundled sample image (click the image to substitute your own) or on your camera.
+
+FaceMesh-V2's face detector is MediaPipe's short range model, which expects the face to fill a good part of the frame. The face in the shared sample image is smaller than that, so the demo searches a sub-region of the picture and maps the landmarks back, drawing them over the whole image.
 
 Repository layout
 -----------------
@@ -33,9 +36,11 @@ common/             modules shared across demos
   constants.js
   demoUtils.js      model loading, image to tensor conversion, run buttons
   blazeUtils.js     anchor decoding and non-max suppression, shared by the Blaze models
+  blazefaceAnchors.js the 896 SSD anchors, shared by Blaze Face and FaceMesh-V2
   detectionUtils.js draws detector boxes, one colour per category
 images/             sample images
-<model>/            one folder per demo: index.html, its helper modules, its weights
+<model>/            one folder per demo: index.html, its helper modules, its
+                    weights and the model's LICENSE
 ```
 
 Every model folder holds its own `.onnx` weights and `.onnx.prototxt` model file next to its `index.html`, so a relative `fetch()` from the page finds them without any path configuration.
@@ -68,6 +73,8 @@ Two ways to call `ailia.js`
 
 - `blazeface/` and `blazehand/` use the standard API, `ailia.run` with preprocessing and postprocessing callbacks, which is what the tutorial below explains. `ailia.run` owns the input and output buffers, so the callbacks only have to fill and read tensors. The Blaze models still need anchor decoding and weighted non-max suppression, and that work lives in their postprocessing callbacks. Blaze Hand also shows how to vary the batch size at run time, by passing the input shape as `ailia.run`'s third argument: one crop per detected hand.
 
+- `facemesh_v2/` chains two models on `ailia.run`: a face detector, then the mesh on a rotated crop of each face. Its models are converted from TFLite and take NHWC input, so it passes `channelsLast` to the shared image conversion, and the mesh reports no default input shape so the shape is passed to `ailia.run` explicitly.
+
 - `mobilenet_ssd/` and `yolox/` use `AiliaDetector` instead. It wraps the detector algorithm, the category list and the thresholds for a known model type, and decodes the boxes natively, so there is no postprocessing to write. Moving these to `ailia.run` would mean reimplementing the SSD and YOLOX decoding in JavaScript.
 
 License
@@ -75,7 +82,17 @@ License
 
 `ailia.js` is a commercial library, and commercial use requires a license. See `ailia-js/LICENSE_AILIA_EN.pdf` and contact [ailia Inc.](https://ailia.ai/) for licensing.
 
-The models are covered by their own upstream licenses, linked from [`index.html`](index.html).
+The model weights are redistributed here under their own upstream licenses, and each model folder carries the matching `LICENSE` file:
+
+| Model | License |
+| --- | --- |
+| [`blazeface/LICENSE`](blazeface/LICENSE) | Apache 2.0 |
+| [`facemesh_v2/LICENSE`](facemesh_v2/LICENSE) | Apache 2.0 (MediaPipe) |
+| [`blazehand/LICENSE`](blazehand/LICENSE) | Apache 2.0 (MediaPipe), via the BlazeFace-PyTorch conversion |
+| [`mobilenet_ssd/LICENSE`](mobilenet_ssd/LICENSE) | MIT |
+| [`yolox/LICENSE`](yolox/LICENSE) | Apache 2.0 |
+
+These cover the models only. They say nothing about `ailia.js` itself, which stays under the commercial license above.
 
 Tutorial: the standard API
 ================

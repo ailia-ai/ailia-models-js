@@ -140,12 +140,16 @@ export const Normalization = {
  * writes it straight into a buffer that `ailia.run` provides, so no manual
  * allocation is needed.
  *
+ * Defaults to the NCHW channel order. Models converted from TFLite, such as the
+ * MediaPipe face detector and face mesh, expect NHWC instead; pass
+ * `channelsLast: true` for those.
+ *
  * @param {Float32Array} destination the input buffer handed to the preprocessing callback
  * @param {HTMLImageElement|HTMLVideoElement|HTMLCanvasElement|Array} inputImages
  * @param {number} requiredWidth
  * @param {number} requiredHeight
  */
-export function writeInputImage(destination, inputImages, requiredWidth, requiredHeight, { toGreyscale: greyscale, normalize } = { toGreyscale: false, normalize: Normalization.None }) {
+export function writeInputImage(destination, inputImages, requiredWidth, requiredHeight, { toGreyscale: greyscale, normalize, channelsLast } = { toGreyscale: false, normalize: Normalization.None }) {
     if (Array.isArray(inputImages) === false) {
         inputImages = [inputImages];
     }
@@ -237,7 +241,9 @@ export function writeInputImage(destination, inputImages, requiredWidth, require
                     }
 
                     destination[
-                        ((inputIndex * colorCanalCount + c) * requiredHeight + j) * requiredWidth + i
+                        channelsLast ?
+                            ((inputIndex * requiredHeight + j) * requiredWidth + i) * colorCanalCount + c :
+                            ((inputIndex * colorCanalCount + c) * requiredHeight + j) * requiredWidth + i
                     ] = value;
                 }
             }
