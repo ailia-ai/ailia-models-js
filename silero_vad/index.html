@@ -48,6 +48,38 @@
             const sampleButton = document.querySelector('.sampleAudioButton');
             const micButton = document.querySelector('.microphoneButton');
 
+            const deviceSelect = document.querySelector('.device-select');
+
+            // Labels are only revealed once the user has granted access, so this is
+            // called again after the first successful getUserMedia
+            async function listMicrophones() {
+                if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+                    return;
+                }
+
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const inputs = devices.filter(device => device.kind === 'audioinput');
+                const chosen = deviceSelect.value;
+
+                deviceSelect.innerHTML = '<option value="">Default microphone</option>';
+                inputs.forEach((device, i) => {
+                    const option = document.createElement('option');
+                    option.value = device.deviceId;
+                    option.textContent = device.label || `Microphone ${i + 1}`;
+                    deviceSelect.appendChild(option);
+                });
+
+                if (chosen && inputs.some(device => device.deviceId === chosen)) {
+                    deviceSelect.value = chosen;
+                }
+                console.log(`${inputs.length} microphone(s) available`);
+            }
+
+            listMicrophones();
+            if (navigator.mediaDevices) {
+                navigator.mediaDevices.addEventListener('devicechange', listMicrophones);
+            }
+
             // null when idle, otherwise the function that tears the capture down
             let stopCapture = null;
             let startingCapture = false;
@@ -126,13 +158,22 @@
                 startingCapture = true;
                 let stream;
                 try {
-                    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    const audio = {
+                        echoCancellation: false,
+                        noiseSuppression: false,
+                        autoGainControl: false
+                    };
+                    if (deviceSelect.value) {
+                        audio.deviceId = { exact: deviceSelect.value };
+                    }
+                    stream = await navigator.mediaDevices.getUserMedia({ audio });
                 } catch (error) {
                     startingCapture = false;
                     setStatus(`Failed to acquire the microphone: ${error.message}`, 'error');
                     return;
                 }
                 startingCapture = false;
+                listMicrophones();
 
                 // Capture at whatever rate the hardware runs at and convert below.
                 // Forcing the context to the model's 8 kHz and connecting a 48 kHz
@@ -160,6 +201,18 @@
                     readyState: track && track.readyState,
                     settings: track && track.getSettings()
                 });
+
+                // Chrome and Safari can feed Web Audio nothing but zeros unless the
+                // stream is also consumed by a media element, even though the track
+                // reports itself live. Keep a muted one attached for the duration.
+                const keepAlive = new Audio();
+                keepAlive.srcObject = stream;
+                keepAlive.muted = true;
+                try {
+                    await keepAlive.play();
+                } catch (error) {
+                    console.warn('Could not start the keep-alive element:', error.message);
+                }
 
                 const source = context.createMediaStreamSource(stream);
                 const capture = new AudioWorkletNode(context, 'microphone-capture', {
@@ -228,6 +281,10 @@
                     }
 
                     blocksSeen++;
+                    if (blocksSeen === 1) {
+                        console.log('First block:', Array.from(message.samples.slice(0, 8)),
+                            'peak', message.peak);
+                    }
                     if (message.peak > nativePeak) {
                         nativePeak = message.peak;
                     }
@@ -310,6 +367,8 @@
                     capture.port.onmessage = null;
                     capture.disconnect();
                     source.disconnect();
+                    keepAlive.pause();
+                    keepAlive.srcObject = null;
                     mute.disconnect();
                     stream.getTracks().forEach(track => track.stop());
                     context.close();
@@ -353,6 +412,12 @@
                 runOnSampleAudio();
             });
 
+            deviceSelect.addEventListener('change', () => {
+                if (stopCapture) {
+                    stopRecording();
+                }
+            });
+
             micButton.addEventListener('click', () => {
                 if (stopCapture) {
                     stopRecording();
@@ -382,6 +447,9 @@
 
         <div class="controls">
             <button class="sampleAudioButton">Run with sample audio</button>
+            <select class="device-select" aria-label="Microphone">
+                <option value="">Default microphone</option>
+            </select>
             <button class="microphoneButton">Record from microphone</button>
             <button class="cutButton" disabled>Play speech only</button>
         </div>
