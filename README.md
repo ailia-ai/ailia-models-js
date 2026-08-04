@@ -1,6 +1,11 @@
 Tutorial on how to use `ailia.js`
 ================
 
+Live demo
+---------
+
+You can try the models in your browser at [https://js.ailia.ai/](https://js.ailia.ai/).
+
 General presentation of the example
 -----------------------------------
 
