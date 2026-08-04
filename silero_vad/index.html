@@ -10,11 +10,11 @@
     <script type='module'>
         import { Ailia } from '../ailia-js/ailia.js';
         import { setStatus, createAiliaWithModel } from '../common/demoUtils.js';
-        import { SileroVad, SAMPLE_RATE, WINDOW_SAMPLES, SpeechSegmenter, computeSpeechProbabilities, findSpeechSegments, collectSegments } from './vadUtils.js';
+        import { SileroVad, SAMPLE_RATE, WINDOW_SAMPLES, SpeechSegmenter, Resampler, computeSpeechProbabilities, findSpeechSegments, collectSegments } from './vadUtils.js';
         import { drawWaveform, play } from './waveform.js';
 
-        // ScriptProcessorNode wants a power of two, and 1024 divides cleanly into
-        // the model's 256 sample windows
+        // ScriptProcessorNode wants a power of two. This is a block at the
+        // hardware's rate, so at 48 kHz it is about 21 ms of audio.
         const CAPTURE_BUFFER_SAMPLES = 1024;
         const MAX_RECORDING_SECONDS = 30;
         // How much of the recording the live view shows. Holding the time scale
@@ -66,10 +66,13 @@
                 segmentList.appendChild(item);
             }
 
+            let captureRate = SAMPLE_RATE;
+
             function summarize(samples, windowCount, segments) {
                 const speechSamples = segments.reduce((sum, s) => sum + (s.end - s.start), 0);
                 resultJson.innerText = JSON.stringify({
                     sampleRate: SAMPLE_RATE,
+                    captureRate: captureRate,
                     durationSeconds: +(samples.length / SAMPLE_RATE).toFixed(2),
                     windows: windowCount,
                     speechSegments: segments.length,
@@ -97,6 +100,8 @@
                     const decoded = await context.decodeAudioData(await response.arrayBuffer());
                     context.close();
                     const samples = decoded.getChannelData(0);
+                    // The file is decoded straight to the model's rate
+                    captureRate = SAMPLE_RATE;
 
                     const startTime = new Date();
                     const probabilities = computeSpeechProbabilities(vad, samples);
@@ -128,10 +133,16 @@
                 }
                 startingCapture = false;
 
-                const context = new AudioContext({ sampleRate: SAMPLE_RATE });
+                // Capture at whatever rate the hardware runs at and convert below.
+                // Forcing the context to the model's 8 kHz and connecting a 48 kHz
+                // microphone to it can yield nothing but silence.
+                const context = new AudioContext();
                 // A context created before a gesture can start suspended, and then
                 // no audio would ever be delivered
                 await context.resume();
+                const resampler = new Resampler(context.sampleRate, SAMPLE_RATE);
+                captureRate = context.sampleRate;
+                console.log(`Capturing at ${context.sampleRate} Hz, resampling to ${SAMPLE_RATE} Hz`);
 
                 const source = context.createMediaStreamSource(stream);
                 const processor = context.createScriptProcessor(CAPTURE_BUFFER_SAMPLES, 1, 1);
@@ -170,14 +181,14 @@
                 redraw = setInterval(drawLive, LIVE_REDRAW_MS);
 
                 processor.onaudioprocess = event => {
-                    const input = event.inputBuffer.getChannelData(0);
+                    const resampled = resampler.process(event.inputBuffer.getChannelData(0));
 
                     const room = captured.length - capturedLength;
                     if (room <= 0) {
                         stopRecording();
                         return;
                     }
-                    const taken = input.subarray(0, Math.min(input.length, room));
+                    const taken = resampled.subarray(0, Math.min(resampled.length, room));
                     captured.set(taken, capturedLength);
                     capturedLength += taken.length;
 

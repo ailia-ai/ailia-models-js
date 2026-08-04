@@ -100,6 +100,64 @@ export class SileroVad {
 }
 
 /**
+ * Converts a stream of blocks from one sample rate to another.
+ *
+ * A live MediaStream cannot be relied on to be resampled by the AudioContext it
+ * is connected to: asking for a context at 8 kHz and feeding it a 48 kHz
+ * microphone can simply produce silence. So capture runs at whatever rate the
+ * hardware gives and the rate conversion happens here.
+ *
+ * Each output sample is the mean of the input samples it spans, which both
+ * decimates and low-passes, and handles ratios that are not whole numbers.
+ */
+export class Resampler {
+    constructor(inputRate, outputRate) {
+        this.ratio = inputRate / outputRate;
+        this.pending = new Float32Array(0);
+        this.position = 0;
+    }
+
+    /**
+     * @param {Float32Array} input one block at the input rate
+     * @returns {Float32Array} however many output samples that block completed
+     */
+    process(input) {
+        if (this.ratio === 1) {
+            return input.slice();
+        }
+
+        const buffer = new Float32Array(this.pending.length + input.length);
+        buffer.set(this.pending, 0);
+        buffer.set(input, this.pending.length);
+
+        const output = new Float32Array(Math.ceil((buffer.length - this.position) / this.ratio));
+        let count = 0;
+
+        while (this.position + this.ratio <= buffer.length) {
+            const from = this.position;
+            const to = from + this.ratio;
+
+            let sum = 0;
+            let taken = 0;
+            for (let i = Math.floor(from); i < to; i++) {
+                sum += buffer[i];
+                taken++;
+            }
+            output[count++] = taken ? sum / taken : 0;
+
+            this.position = to;
+        }
+
+        // Keep only the samples the next block still needs
+        const consumed = Math.floor(this.position);
+        this.pending = buffer.slice(consumed);
+        this.position -= consumed;
+
+        return output.subarray(0, count);
+    }
+}
+
+/**
  * Runs the whole signal through the model, one window at a time.
  *
  * @param {SileroVad} vad
