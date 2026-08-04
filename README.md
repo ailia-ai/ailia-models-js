@@ -18,6 +18,7 @@ Demos in this repository
 | [`blazeface/`](blazeface/) | Face detection | `blazeface.onnx` |
 | [`facemesh_v2/`](facemesh_v2/) | 478 point face mesh | `face_detector.onnx`, `face_landmarks_detector.onnx` |
 | [`blazehand/`](blazehand/) | Hand landmark detection | `blazepalm.onnx`, `blazehand.onnx` |
+| [`u2netp/`](u2netp/) | Background removal | `u2netp_opset11.onnx` |
 | [`mobilenet_ssd/`](mobilenet_ssd/) | Object detection (20 VOC categories) | `mb2-ssd-lite.onnx` |
 | [`yolox/`](yolox/) | Object detection (80 COCO categories) | `yolox_tiny.onnx` |
 
@@ -75,6 +76,8 @@ Two ways to call `ailia.js`
 
 - `facemesh_v2/` chains two models on `ailia.run`: a face detector, then the mesh on a rotated crop of each face. Its models are converted from TFLite and take NHWC input, so it passes `channelsLast` to the shared image conversion, and the mesh reports no default input shape so the shape is passed to `ailia.run` explicitly.
 
+- `u2netp/` also uses `ailia.run`. Its preprocessing needs per channel mean and standard deviation rather than one of the shared normalization modes, so it writes the tensor itself in the preprocessing callback.
+
 - `mobilenet_ssd/` and `yolox/` use `AiliaDetector` instead. It wraps the detector algorithm, the category list and the thresholds for a known model type, and decodes the boxes natively, so there is no postprocessing to write. Moving these to `ailia.run` would mean reimplementing the SSD and YOLOX decoding in JavaScript.
 
 License
@@ -89,6 +92,7 @@ The model weights are redistributed here under their own upstream licenses, and 
 | [`blazeface/LICENSE`](blazeface/LICENSE) | Apache 2.0 |
 | [`facemesh_v2/LICENSE`](facemesh_v2/LICENSE) | Apache 2.0 (MediaPipe) |
 | [`blazehand/LICENSE`](blazehand/LICENSE) | Apache 2.0 (MediaPipe), via the BlazeFace-PyTorch conversion |
+| [`u2netp/LICENSE`](u2netp/LICENSE) | Apache 2.0 |
 | [`mobilenet_ssd/LICENSE`](mobilenet_ssd/LICENSE) | MIT |
 | [`yolox/LICENSE`](yolox/LICENSE) | Apache 2.0 |
 
