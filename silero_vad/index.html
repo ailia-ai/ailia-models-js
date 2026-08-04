@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Silero VAD | ailia.js Demo</title>
+    <link rel="stylesheet" href="../style.css" />
+
+    <script type='module'>
+        import { Ailia } from '../ailia-js/ailia.js';
+        import { setStatus, createAiliaWithModel } from '../common/demoUtils.js';
+        import { SileroVad, SAMPLE_RATE, WINDOW_SAMPLES, computeSpeechProbabilities, findSpeechSegments, collectSegments } from './vadUtils.js';
+        import { drawWaveform, play } from './waveform.js';
+
+        // ScriptProcessorNode wants a power of two, and 1024 divides cleanly into
+        // the model's 256 sample windows
+        const CAPTURE_BUFFER_SAMPLES = 1024;
+        const MAX_RECORDING_SECONDS = 30;
+
+        if (document.readyState === 'complete') { // Safari
+            onload();
+        }else{ // Chrome or Safari
+            window.addEventListener('load', onload);
+        }
+
+        async function onload(){
+            await Ailia.initialize();
+            const ailiaVad = await createAiliaWithModel('silero_vad', 'silero_vad_v6_2');
+
+            if (ailiaVad === null) {
+                setStatus('Could not load the model files from the backend', 'error');
+                return;
+            }
+
+            const vad = new SileroVad(ailiaVad);
+
+            document.body.classList.add('model-loaded');
+            setStatus('Model ready to run');
+
+            const waveformCanvas = document.querySelector('.waveform');
+            const segmentList = document.querySelector('.segment-list');
+            const resultJson = document.querySelector('.result-json');
+            const sampleButton = document.querySelector('.sampleAudioButton');
+            const micButton = document.querySelector('.microphoneButton');
+
+            let recording = null;
+
+            function showResult(samples, probabilities, segments) {
+                drawWaveform(waveformCanvas, samples, segments);
+
+                segmentList.innerHTML = '';
+                segments.forEach((segment, i) => {
+                    const seconds = from => (from / SAMPLE_RATE).toFixed(2);
+                    const item = document.createElement('li');
+                    item.innerHTML = `<button class="segment-play">Play</button> ` +
+                        `segment ${i + 1}: ${seconds(segment.start)}s &ndash; ${seconds(segment.end)}s ` +
+                        `(${seconds(segment.end - segment.start)}s)`;
+                    item.querySelector('.segment-play').addEventListener('click', () =>
+                        play(samples.slice(segment.start, segment.end), SAMPLE_RATE));
+                    segmentList.appendChild(item);
+                });
+
+                const speechSamples = segments.reduce((sum, s) => sum + (s.end - s.start), 0);
+                resultJson.innerText = JSON.stringify({
+                    sampleRate: SAMPLE_RATE,
+                    durationSeconds: +(samples.length / SAMPLE_RATE).toFixed(2),
+                    windows: probabilities.length,
+                    speechSegments: segments.length,
+                    speechSeconds: +(speechSamples / SAMPLE_RATE).toFixed(2),
+                    speechShare: `${(100 * speechSamples / Math.max(1, samples.length)).toFixed(1)}%`
+                }, null, 4);
+
+                const cutButton = document.querySelector('.cutButton');
+                cutButton.disabled = segments.length === 0;
+                cutButton.onclick = () => play(collectSegments(segments, samples), SAMPLE_RATE);
+            }
+
+            async function runOnSampleAudio() {
+                try {
+                    setStatus('Decoding the sample audio');
+                    const response = await fetch('en_example.wav');
+                    const context = new AudioContext({ sampleRate: SAMPLE_RATE });
+                    const decoded = await context.decodeAudioData(await response.arrayBuffer());
+                    context.close();
+                    const samples = decoded.getChannelData(0);
+
+                    const startTime = new Date();
+                    const probabilities = computeSpeechProbabilities(vad, samples);
+                    const endTime = new Date();
+                    const segments = findSpeechSegments(probabilities, samples.length);
+
+                    setStatus('The model has finished running ' + (endTime.getTime() - startTime.getTime()) + 'ms');
+                    showResult(samples, probabilities, segments);
+                } catch (e) {
+                    console.error(e);
+                    setStatus(`Error while running the model: ${e.message}`, 'error');
+                }
+            }
+
+            async function startRecording() {
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    setStatus('Your browser does not support user media.', 'error');
+                    return;
+                }
+
+                let stream;
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                } catch (error) {
+                    setStatus(`Failed to acquire the microphone: ${error.message}`, 'error');
+                    return;
+                }
+
+                const context = new AudioContext({ sampleRate: SAMPLE_RATE });
+                const source = context.createMediaStreamSource(stream);
+                const processor = context.createScriptProcessor(CAPTURE_BUFFER_SAMPLES, 1, 1);
+
+                const captured = new Float32Array(SAMPLE_RATE * MAX_RECORDING_SECONDS);
+                let capturedLength = 0;
+                const probabilities = [];
+                let pending = new Float32Array(0);
+
+                vad.reset();
+
+                processor.onaudioprocess = event => {
+                    const input = event.inputBuffer.getChannelData(0);
+
+                    const room = captured.length - capturedLength;
+                    if (room <= 0) {
+                        stopRecording();
+                        return;
+                    }
+                    const taken = input.subarray(0, Math.min(input.length, room));
+                    captured.set(taken, capturedLength);
+                    capturedLength += taken.length;
+
+                    // Feed whole windows to the model, keeping the remainder
+                    const merged = new Float32Array(pending.length + taken.length);
+                    merged.set(pending, 0);
+                    merged.set(taken, pending.length);
+
+                    let offset = 0;
+                    while (offset + WINDOW_SAMPLES <= merged.length) {
+                        probabilities.push(vad.process(merged.subarray(offset, offset + WINDOW_SAMPLES)));
+                        offset += WINDOW_SAMPLES;
+                    }
+                    pending = merged.slice(offset);
+
+                    const samples = captured.subarray(0, capturedLength);
+                    const live = findSpeechSegments(Float32Array.from(probabilities), capturedLength);
+                    drawWaveform(waveformCanvas, samples, live, captured.length);
+
+                    const speaking = probabilities[probabilities.length - 1] >= 0.5;
+                    setStatus(`Recording ${(capturedLength / SAMPLE_RATE).toFixed(1)}s of ` +
+                        `${MAX_RECORDING_SECONDS}s — ${speaking ? 'speech' : 'silence'}`);
+                };
+
+                source.connect(processor);
+                // ScriptProcessorNode only runs while it is connected to the graph,
+                // so route it to a muted gain rather than straight to the speakers
+                const mute = context.createGain();
+                mute.gain.value = 0;
+                processor.connect(mute);
+                mute.connect(context.destination);
+
+                recording = () => {
+                    processor.onaudioprocess = null;
+                    processor.disconnect();
+                    source.disconnect();
+                    mute.disconnect();
+                    stream.getTracks().forEach(track => track.stop());
+                    context.close();
+
+                    const samples = captured.slice(0, capturedLength);
+                    const probs = Float32Array.from(probabilities);
+                    const segments = findSpeechSegments(probs, samples.length);
+                    setStatus(`Recorded ${(capturedLength / SAMPLE_RATE).toFixed(1)}s`);
+                    showResult(samples, probs, segments);
+                };
+
+                micButton.innerText = 'Stop recording';
+                setStatus('Recording');
+            }
+
+            function stopRecording() {
+                if (recording) {
+                    const stop = recording;
+                    recording = null;
+                    micButton.innerText = 'Record from microphone';
+                    stop();
+                }
+            }
+
+            sampleButton.addEventListener('click', () => {
+                stopRecording();
+                runOnSampleAudio();
+            });
+
+            micButton.addEventListener('click', () => {
+                if (recording) {
+                    stopRecording();
+                } else {
+                    startRecording();
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="page page--wide">
+
+        <header class="site-header">
+            <a class="back-link" href="../">&larr; ailia.js Demo</a>
+            <h1>Silero VAD</h1>
+            <p class="tagline">Voice activity detection running in your browser with WebAssembly.</p>
+        </header>
+
+        <p class="status-container">Checking the model files</p>
+
+        <div class="controls">
+            <button class="sampleAudioButton">Run with sample audio</button>
+            <button class="microphoneButton">Record from microphone</button>
+            <button class="cutButton" disabled>Play speech only</button>
+        </div>
+
+        <section>
+            <h2>Waveform</h2>
+            <canvas class="waveform" width="1024" height="220"></canvas>
+            <p class="waveform-caption">Stretches the model called speech are shaded and drawn in blue.</p>
+        </section>
+
+        <section>
+            <h2>Speech segments</h2>
+            <ul class="segment-list link-list"></ul>
+            <p class="result-json"></p>
+        </section>
+
+    </div>
+</body>
+
+</html>

@@ -277,3 +277,38 @@ button:hover {
 .result-json:empty {
     display: none;
 }
+
+/* Silero VAD: waveform and segment list ---------------------------------- */
+
+.waveform {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.waveform-caption {
+    margin: 0.5rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.segment-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+}
+
+.segment-play {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.8rem;
+}
+
+button:disabled {
+    background: var(--border);
+    border-color: var(--border);
+    color: var(--text-muted);
+    cursor: default;
+}
