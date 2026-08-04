@@ -35,8 +35,9 @@ const BLAZEFACE_FEATURES = {
  * @param {Float32Array} heap
  * @param {number} outputBoxesRef
  * @param {number} outputScoresRef
+ * @param {number} [minimumScoreThreshold]
  */
-export function postprocess(heap, outputBoxesRef, outputScoresRef) {
+export function postprocess(heap, outputBoxesRef, outputScoresRef, minimumScoreThreshold = MINIMUM_SCORE_THRESHOLD) {
     outputBoxesRef /= CONSTANTS.SIZE_OF_FLOAT;
     outputScoresRef /= CONSTANTS.SIZE_OF_FLOAT;
     let boxes = decodeBoxes(heap, outputBoxesRef);
@@ -47,7 +48,7 @@ export function postprocess(heap, outputBoxesRef, outputScoresRef) {
         boxes[i].score = sigmoid(Math.max(Math.min(heap[outputScoresRef + i], SCORE_THRESHOLD), -SCORE_THRESHOLD));
     }
 
-    boxes = boxes.filter(b => b.score > MINIMUM_SCORE_THRESHOLD);
+    boxes = boxes.filter(b => b.score > minimumScoreThreshold);
 
     const filteredDetections = weightedNonMaxSuppression(boxes, MINIMUM_OVERLAP_THRESHOLD);
 
@@ -65,7 +66,7 @@ export function postprocess(heap, outputBoxesRef, outputScoresRef) {
 
 const decodeBoxes = generateBoxDecoder(REQUIRED_INPUT_WIDTH, TENSOR_COUNT, TENSOR_SIZE, FEATURE_COUNT, anchors);
 
-export function computeBlazeface(ailia, inputPic) {
+export function computeBlazeface(ailia, inputPic, minimumScoreThreshold = MINIMUM_SCORE_THRESHOLD) {
     const { inputImageBufferRef: inputImageBuffer } = loadInputImage(ailia, inputPic, REQUIRED_INPUT_WIDTH, REQUIRED_INPUT_HEIGHT, { normalize: Normalization.UnitCentered });
 
     const outputShape = ailia.getOutputShape();
@@ -88,7 +89,7 @@ export function computeBlazeface(ailia, inputPic) {
     // ailiaRefOutputBlobBuffer(struct AILIANetwork* net, const void** ptr, unsigned int* size, unsigned int index);
     ailia.call('ailiaRefOutputBlobBuffer', 'number', [ailia.ailiaDoublePointer.getPointer(), outputScoresRef, outputSizeRef, 1]);
 
-    const faces = postprocess(ailia.Module.HEAPF32, ailia.Module.HEAPU32[outputBoxesRef / CONSTANTS.SIZE_OF_U32], ailia.Module.HEAPU32[outputScoresRef / CONSTANTS.SIZE_OF_U32]);
+    const faces = postprocess(ailia.Module.HEAPF32, ailia.Module.HEAPU32[outputBoxesRef / CONSTANTS.SIZE_OF_U32], ailia.Module.HEAPU32[outputScoresRef / CONSTANTS.SIZE_OF_U32], minimumScoreThreshold);
 
     ailia.Module._free(outputBoxesRef);
     ailia.Module._free(outputScoresRef);

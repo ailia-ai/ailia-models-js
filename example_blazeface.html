@@ -12,6 +12,9 @@
         import { computeBlazeface, plotFaces } from './blazefaceUtils.js';
         import { delay, setStatus, changeSampleImage, createAiliaWithModel, setupSampleImageRunButton, setupVideoStreamRunButton } from './demoUtils.js';
 
+        // Only used for the bundled sample image, not for the camera stream
+        const SAMPLE_IMAGE_SCORE_THRESHOLD = 0.85;
+
         if (document.readyState === 'complete') { // Safari
             onload();
         }else{ // Chrome or Safari
@@ -35,11 +38,11 @@
 
             const myresult = document.querySelector('.result-json');
 
-            async function processImage(imageElement, outputOverlayCanvas) {
+            async function processImage(imageElement, outputOverlayCanvas, scoreThreshold) {
                 try {
                     await delay(1);
                     var startTime = new Date();
-                    const faces = computeBlazeface(ailiaBlazeface, imageElement);
+                    const faces = computeBlazeface(ailiaBlazeface, imageElement, scoreThreshold);
                     var endTime = new Date();
                     setStatus('The model has finished running ' + (endTime.getTime() - startTime.getTime()) + 'ms');
 
@@ -57,7 +60,12 @@
                 }
             }
 
-            setupSampleImageRunButton(processImage);
+            // The ferris wheel in sample-image.jpg is a false positive at 0.821, which is
+            // above one of the two anchors that make up the real face (0.806), so the
+            // default 0.75 cannot separate them. The still-image demo therefore runs at a
+            // stricter threshold; the camera keeps the default so small faces still match.
+            setupSampleImageRunButton((imageElement, outputOverlayCanvas) =>
+                processImage(imageElement, outputOverlayCanvas, SAMPLE_IMAGE_SCORE_THRESHOLD));
             setupVideoStreamRunButton(processImage);
         }
     </script>
