@@ -1,6 +1,5 @@
 import { weightedNonMaxSuppression, generateBoxDecoder, sigmoid } from '../common/blazeUtils.js';
-import { CONSTANTS } from '../common/constants.js';
-import { loadInputImage, Normalization } from '../common/demoUtils.js';
+import { writeInputImage, Normalization } from '../common/demoUtils.js';
 import anchors from './blazefaceAnchors.js';
 
 const REQUIRED_INPUT_WIDTH = 128;
@@ -11,7 +10,6 @@ const FEATURE_COUNT = 6;
 const SCORE_THRESHOLD = 100.0;
 const MINIMUM_SCORE_THRESHOLD = 0.75;
 const MINIMUM_OVERLAP_THRESHOLD = 0.3;
-const BLAZEFACE_INPUT_CHANNEL_COUNT = 3;
 const BLAZEFACE_FEATURES = {
     RIGHT_EYE: 0,
     LEFT_EYE: 1,
@@ -32,20 +30,17 @@ const BLAZEFACE_FEATURES = {
  */
 
 /**
- * @param {Float32Array} heap
- * @param {number} outputBoxesRef
- * @param {number} outputScoresRef
+ * @param {Float32Array} boxPredictions the 896x16 regressor output blob
+ * @param {Float32Array} scores the 896x1 classifier output blob
  * @param {number} [minimumScoreThreshold]
  */
-export function postprocess(heap, outputBoxesRef, outputScoresRef, minimumScoreThreshold = MINIMUM_SCORE_THRESHOLD) {
-    outputBoxesRef /= CONSTANTS.SIZE_OF_FLOAT;
-    outputScoresRef /= CONSTANTS.SIZE_OF_FLOAT;
-    let boxes = decodeBoxes(heap, outputBoxesRef);
+export function postprocess(boxPredictions, scores, minimumScoreThreshold = MINIMUM_SCORE_THRESHOLD) {
+    let boxes = decodeBoxes(boxPredictions);
     const rawScores = [];
 
     for (let i = 0; i < TENSOR_COUNT; i++) {
-        rawScores.push(heap[outputScoresRef + i]);
-        boxes[i].score = sigmoid(Math.max(Math.min(heap[outputScoresRef + i], SCORE_THRESHOLD), -SCORE_THRESHOLD));
+        rawScores.push(scores[i]);
+        boxes[i].score = sigmoid(Math.max(Math.min(scores[i], SCORE_THRESHOLD), -SCORE_THRESHOLD));
     }
 
     boxes = boxes.filter(b => b.score > minimumScoreThreshold);
@@ -67,36 +62,22 @@ export function postprocess(heap, outputBoxesRef, outputScoresRef, minimumScoreT
 const decodeBoxes = generateBoxDecoder(REQUIRED_INPUT_WIDTH, TENSOR_COUNT, TENSOR_SIZE, FEATURE_COUNT, anchors);
 
 export function computeBlazeface(ailia, inputPic, minimumScoreThreshold = MINIMUM_SCORE_THRESHOLD) {
-    const { inputImageBufferRef: inputImageBuffer } = loadInputImage(ailia, inputPic, REQUIRED_INPUT_WIDTH, REQUIRED_INPUT_HEIGHT, { normalize: Normalization.UnitCentered });
-
-    const outputShape = ailia.getOutputShape();
-
-    const totalBoxesOutputSize = outputShape.x * outputShape.y * outputShape.z * outputShape.w * CONSTANTS.SIZE_OF_FLOAT;
-    const totalInputSize = REQUIRED_INPUT_WIDTH * REQUIRED_INPUT_HEIGHT * BLAZEFACE_INPUT_CHANNEL_COUNT * CONSTANTS.SIZE_OF_FLOAT;
-
-    // ailia.Module._free(outputShapeRef);
-
-    const outputBoxesRef = ailia.Module._malloc(totalBoxesOutputSize * CONSTANTS.SIZE_OF_FLOAT);
-    const outputScoresRef = ailia.Module._malloc(1 * CONSTANTS.SIZE_OF_REF);
-    const outputSizeRef = ailia.Module._malloc(CONSTANTS.SIZE_OF_REF);
-
-    // ailiaPredict(struct AILIANetwork* net, void* dest, unsigned int dest_size, const void* src, unsigned int src_size);
-    ailia.call('ailiaPredict', 'number', [ailia.ailiaDoublePointer.getPointer(), outputBoxesRef, totalBoxesOutputSize, inputImageBuffer, totalInputSize]);
-
-    // ailiaRefOutputBlobBuffer(struct AILIANetwork* net, const void** ptr, unsigned int* size, unsigned int index);
-    ailia.call('ailiaRefOutputBlobBuffer', 'number', [ailia.ailiaDoublePointer.getPointer(), outputBoxesRef, outputSizeRef, 0]);
-
-    // ailiaRefOutputBlobBuffer(struct AILIANetwork* net, const void** ptr, unsigned int* size, unsigned int index);
-    ailia.call('ailiaRefOutputBlobBuffer', 'number', [ailia.ailiaDoublePointer.getPointer(), outputScoresRef, outputSizeRef, 1]);
-
-    const faces = postprocess(ailia.Module.HEAPF32, ailia.Module.HEAPU32[outputBoxesRef / CONSTANTS.SIZE_OF_U32], ailia.Module.HEAPU32[outputScoresRef / CONSTANTS.SIZE_OF_U32], minimumScoreThreshold);
-
-    ailia.Module._free(outputBoxesRef);
-    ailia.Module._free(outputScoresRef);
-    ailia.Module._free(outputSizeRef);
-    ailia.Module._free(inputImageBuffer);
-
-    return faces;
+    // ailia.run owns the input and output buffers, so the preprocessing callback
+    // only has to fill the tensor and the postprocessing one only has to read it
+    return ailia.run(
+        inputBuffers => writeInputImage(
+            inputBuffers.byIndex[0].buffer.Float32,
+            inputPic,
+            REQUIRED_INPUT_WIDTH,
+            REQUIRED_INPUT_HEIGHT,
+            { normalize: Normalization.UnitCentered }
+        ),
+        outputBuffers => postprocess(
+            outputBuffers.byIndex[0].buffer.Float32,
+            outputBuffers.byIndex[1].buffer.Float32,
+            minimumScoreThreshold
+        )
+    );
 }
 
 /**

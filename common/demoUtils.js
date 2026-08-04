@@ -1,5 +1,4 @@
 import { Ailia } from '../ailia-js/ailia.js';
-import { CONSTANTS } from './constants.js';
 
 const VIDEO_STREAM_STATE = {
     STOPPED: 0,
@@ -136,7 +135,17 @@ export const Normalization = {
     UnitCentered: 3 // [-1, 1]
 };
 
-export function loadInputImage(ailia, inputImages, requiredWidth, requiredHeight, { toGreyscale: greyscale, normalize } = { toGreyscale: false, normalize: Normalization.None }) {
+/**
+ * Converts one or more images into the NCHW float tensor that ailia expects and
+ * writes it straight into a buffer that `ailia.run` provides, so no manual
+ * allocation is needed.
+ *
+ * @param {Float32Array} destination the input buffer handed to the preprocessing callback
+ * @param {HTMLImageElement|HTMLVideoElement|HTMLCanvasElement|Array} inputImages
+ * @param {number} requiredWidth
+ * @param {number} requiredHeight
+ */
+export function writeInputImage(destination, inputImages, requiredWidth, requiredHeight, { toGreyscale: greyscale, normalize } = { toGreyscale: false, normalize: Normalization.None }) {
     if (Array.isArray(inputImages) === false) {
         inputImages = [inputImages];
     }
@@ -160,20 +169,7 @@ export function loadInputImage(ailia, inputImages, requiredWidth, requiredHeight
         throw new Error(errorMessage);
     }
 
-    const totalInputSize = inputImages.length * colorCanalCount * requiredWidth * requiredHeight * CONSTANTS.SIZE_OF_FLOAT;
-
-    ailia.inputImageWidth = requiredWidth;
-    ailia.inputImageHeight = requiredHeight;
-
-    const inputImageBufferRef = ailia.Module._malloc(totalInputSize);
-
-    const jsArr = Array(inputImages.length).fill().map(_ => [
-        Array(ailia.inputImageHeight).fill().map(() => Array(ailia.inputImageWidth).fill())
-    ]);
-
     inputImages.forEach((inputImage, inputIndex) => {
-        let initialWidth;
-        let initialHeight;
         let ctx;
 
         if (
@@ -185,11 +181,11 @@ export function loadInputImage(ailia, inputImages, requiredWidth, requiredHeight
         ) {
             // Create an empty canvas element
             const canvas = document.createElement('canvas');
-            canvas.width = ailia.inputImageWidth;
-            canvas.height = ailia.inputImageHeight;
+            canvas.width = requiredWidth;
+            canvas.height = requiredHeight;
 
-            initialWidth = inputImage.naturalWidth || inputImage.videoWidth || inputImage.width;
-            initialHeight = inputImage.naturalHeight || inputImage.videoHeight || inputImage.height;
+            const initialWidth = inputImage.naturalWidth || inputImage.videoWidth || inputImage.width;
+            const initialHeight = inputImage.naturalHeight || inputImage.videoHeight || inputImage.height;
             const ratio = getRatioToMaxSizeWithinFrame(
                 initialWidth,
                 initialHeight,
@@ -208,21 +204,19 @@ export function loadInputImage(ailia, inputImages, requiredWidth, requiredHeight
             ctx.drawImage(inputImage, xOffset, yOffset, finalWidth, finalHeight);
         } else if (inputImage.constructor.name === 'HTMLCanvasElement') {
             ctx = inputImage.getContext('2d');
-            initialWidth = inputImage.width;
-            initialHeight = inputImage.height;
         }
 
         // Extract the data array representing the decoded image
         const imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
 
         for (let c = 0; c < colorCanalCount; ++c) {
-            for (let j = 0; j < ailia.inputImageHeight; ++j) {
-                for (let i = 0; i < ailia.inputImageWidth; ++i) {
-                    let value = imageData.data[(j * ailia.inputImageWidth + i) * 4 + c];
+            for (let j = 0; j < requiredHeight; ++j) {
+                for (let i = 0; i < requiredWidth; ++i) {
+                    let value = imageData.data[(j * requiredWidth + i) * 4 + c];
 
                     if (greyscale) {
                         value *= 0.299;
-                        value += 0.587 * imageData.data[(j * ailia.inputImageWidth + i) * 4 + c + 1] + 0.114 * imageData.data[(j * ailia.inputImageWidth + i) * 4 + c + 2];
+                        value += 0.587 * imageData.data[(j * requiredWidth + i) * 4 + c + 1] + 0.114 * imageData.data[(j * requiredWidth + i) * 4 + c + 2];
                         value = Math.round(value);
                     }
 
@@ -242,24 +236,13 @@ export function loadInputImage(ailia, inputImages, requiredWidth, requiredHeight
                             break;
                     }
 
-                    ailia.Module.HEAPF32[
-                        inputImageBufferRef / 4 +
-                        (
-                            (
-                                inputIndex *
-                                colorCanalCount + c
-                            ) * ailia.inputImageHeight + j
-                        ) * ailia.inputImageWidth + i
-
+                    destination[
+                        ((inputIndex * colorCanalCount + c) * requiredHeight + j) * requiredWidth + i
                     ] = value;
                 }
             }
         }
-
-        window.jsArr = jsArr;
     });
-
-    return { inputImageBufferRef, totalInputSize };
 }
 
 export async function createAiliaWithModel(modelName, modelFileName) {

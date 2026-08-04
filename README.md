@@ -1,25 +1,96 @@
-Tutorial on how to use `ailia.js`
+`ailia.js` demos and tutorial
 ================
+
+`ailia.js` is the JavaScript version of the ailia SDK. It runs neural networks entirely inside the browser using WebAssembly, so there is no server-side inference and no data upload.
+
+This repository holds four runnable demos plus a tutorial on the `ailia.js` standard API.
 
 Live demo
 ---------
 
 You can try the models in your browser at [https://js.ailia.ai/](https://js.ailia.ai/).
 
-General presentation of the example
------------------------------------
+Demos in this repository
+------------------------
+
+| Demo | Task | Model files |
+| --- | --- | --- |
+| [`blazeface/`](blazeface/) | Face detection | `blazeface.onnx` |
+| [`blazehand/`](blazehand/) | Hand landmark detection | `blazepalm.onnx`, `blazehand.onnx` |
+| [`mobilenet_ssd/`](mobilenet_ssd/) | Object detection (20 VOC categories) | `mb2-ssd-lite.onnx` |
+| [`yolox/`](yolox/) | Object detection (80 COCO categories) | `yolox_tiny.onnx` |
+
+Each demo runs on a bundled sample image (click the image to substitute your own) or on your camera.
+
+Repository layout
+-----------------
+
+```
+index.html          landing page linking to the four demos
+style.css           single stylesheet shared by every page
+ailia-js/           the ailia.js SDK (git submodule)
+common/             modules shared across demos
+  constants.js
+  demoUtils.js      model loading, image to tensor conversion, run buttons
+  blazeUtils.js     anchor decoding and non-max suppression, shared by the Blaze models
+  detectionUtils.js draws detector boxes, one colour per category
+images/             sample images
+<model>/            one folder per demo: index.html, its helper modules, its weights
+```
+
+Every model folder holds its own `.onnx` weights and `.onnx.prototxt` model file next to its `index.html`, so a relative `fetch()` from the page finds them without any path configuration.
+
+Running the demos locally
+-------------------------
+
+Clone with the submodule, otherwise `ailia-js/` will be empty:
+
+```bash
+git clone --recurse-submodules https://github.com/ailia-ai/ailia-models-js.git
+```
+
+If you have already cloned without it:
+
+```bash
+git submodule update --init --recursive
+```
+
+The pages must be served over HTTP. Opening them as `file://` fails, because ES module imports and the `fetch()` calls that load the model files are both blocked on that scheme:
+
+```bash
+python3 -m http.server 8000
+```
+
+Then open <http://localhost:8000/>.
+
+Two ways to call `ailia.js`
+---------------------------
+
+- `blazeface/` and `blazehand/` use the standard API, `ailia.run` with preprocessing and postprocessing callbacks, which is what the tutorial below explains. `ailia.run` owns the input and output buffers, so the callbacks only have to fill and read tensors. The Blaze models still need anchor decoding and weighted non-max suppression, and that work lives in their postprocessing callbacks. Blaze Hand also shows how to vary the batch size at run time, by passing the input shape as `ailia.run`'s third argument: one crop per detected hand.
+
+- `mobilenet_ssd/` and `yolox/` use `AiliaDetector` instead. It wraps the detector algorithm, the category list and the thresholds for a known model type, and decodes the boxes natively, so there is no postprocessing to write. Moving these to `ailia.run` would mean reimplementing the SSD and YOLOX decoding in JavaScript.
+
+License
+-------
+
+`ailia.js` is a commercial library, and commercial use requires a license. See `ailia-js/LICENSE_AILIA_EN.pdf` and contact [ailia Inc.](https://ailia.ai/) for licensing.
+
+The models are covered by their own upstream licenses, linked from [`index.html`](index.html).
+
+Tutorial: the standard API
+================
 
 This tutorial will show you how to use `ailia.js` in an ES6 module.
 
 (Of course this can be adapted for old-style JavaScript)
 
-First, put the files `ailia.js`, `ailia_s.js`, `ailia_s.wasm`, `ailia_simd_s.js`, and `ailia_simd_s.wasm` in the folder of your server.
+First, put the files `ailia.js`, `ailia_s.js`, `ailia_s.wasm`, `ailia_simd_s.js`, and `ailia_simd_s.wasm` in the folder of your server. In this repository those files live in `ailia-js/`, which is why the demo pages import from `../ailia-js/ailia.js` rather than `./ailia.js`.
 
 As a support we'll use the example file `example_mnist_standard_api.html`.
 
 This uses the model called MNIST, which is a convolutional neural network trained to recognize hand-drawn digits.
 
-To try it out, put the HTML file in the same folder as the other files above, as well as the image file `testmnist.jpg`, and open it in a browser.
+Note that this file, and the `testmnist.jpg` it reads, are **not** part of this repository. The snippets below are a self-contained walkthrough: to try it out, put the HTML file in the same folder as the other files above, as well as the image file `testmnist.jpg`, and open it in a browser.
 
 The typical usage of `ailia.js` can be decomposed in the following steps:
 
@@ -32,7 +103,7 @@ The typical usage of `ailia.js` can be decomposed in the following steps:
 7. call the destructor on the ailia object
 
 
-Here is the full JavaScript content of `example_mnist_standard_api.html`. You don't need to understand everything at the first read, as a detailed explanation of the parts specific to `ailia.js` follows.
+Here is the full JavaScript content of `example_mnist_standard_api.html`. Its imports assume `ailia.js` and `demoUtils.js` sit next to the HTML file; adjust the paths to wherever you put them. You don't need to understand everything at the first read, as a detailed explanation of the parts specific to `ailia.js` follows.
 
 ```javascript
 import {Ailia} from './ailia.js';
