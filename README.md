@@ -19,9 +19,9 @@ Demos in this repository
 | [`facemesh_v2/`](facemesh_v2/) | 478 point face mesh | `face_detector.onnx`, `face_landmarks_detector.onnx` |
 | [`blazehand/`](blazehand/) | Hand landmark detection | `blazepalm.onnx`, `blazehand.onnx` |
 | [`u2netp/`](u2netp/) | Background removal | `u2netp_opset11.onnx` |
-| [`silero_vad/`](silero_vad/) | Voice activity detection | `silero_vad_v6_2.onnx` |
 | [`mobilenet_ssd/`](mobilenet_ssd/) | Object detection (20 VOC categories) | `mb2-ssd-lite.onnx` |
 | [`yolox/`](yolox/) | Object detection (80 COCO categories) | `yolox_tiny.onnx` |
+| [`silero_vad/`](silero_vad/) | Voice activity detection | `silero_vad_v6_2.onnx` |
 
 Each demo runs on a bundled sample image (click the image to substitute your own) or on your camera. Silero VAD is the exception: it takes audio, either the bundled clip or your microphone.
 
@@ -98,9 +98,9 @@ The model weights are redistributed here under their own upstream licenses, and 
 | [`facemesh_v2/LICENSE`](facemesh_v2/LICENSE) | Apache 2.0 (MediaPipe) |
 | [`blazehand/LICENSE`](blazehand/LICENSE) | Apache 2.0 (MediaPipe), via the BlazeFace-PyTorch conversion |
 | [`u2netp/LICENSE`](u2netp/LICENSE) | Apache 2.0 |
-| [`silero_vad/LICENSE`](silero_vad/LICENSE) | MIT |
 | [`mobilenet_ssd/LICENSE`](mobilenet_ssd/LICENSE) | MIT |
 | [`yolox/LICENSE`](yolox/LICENSE) | Apache 2.0 |
+| [`silero_vad/LICENSE`](silero_vad/LICENSE) | MIT |
 
 These cover the models only. They say nothing about `ailia.js` itself, which stays under the commercial license above.
 
