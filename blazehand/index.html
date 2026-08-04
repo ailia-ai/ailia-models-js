@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Blaze Hand | ailia.js Demo</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../style.css" />
 
     <script type='module'>
-        import { Ailia } from './ailia-js/ailia.js';
+        import { Ailia } from '../ailia-js/ailia.js';
         import { computeBlazepalm, computeBlazehandFromPalms, computeBlazehandFromPreviousLandmarks, plotPalms, plotHands } from './blazehandUtils.js';
-        import { delay, setStatus, changeSampleImage, createAiliaWithModel, setupSampleImageRunButton, setupVideoStreamRunButton } from './demoUtils.js';
+        import { delay, setStatus, changeSampleImage, createAiliaWithModel, setupSampleImageRunButton, setupVideoStreamRunButton } from '../common/demoUtils.js';
 
         if (document.readyState === 'complete') { // Safari
             onload();
@@ -114,7 +114,7 @@
     <div class="page page--wide">
 
         <header class="site-header">
-            <a class="back-link" href="index.html">&larr; ailia.js Demo</a>
+            <a class="back-link" href="../">&larr; ailia.js Demo</a>
             <h1>Blaze Hand</h1>
             <p class="tagline">Hand landmark detection running in your browser with WebAssembly.</p>
         </header>
@@ -129,7 +129,7 @@
         <div class="io-container">
             <div class="input-container">
                 <h2>Sample image (click to change)</h2>
-                <img class="sample-image" src='person_hand.jpg'></img>
+                <img class="sample-image" src='../images/person_hand.jpg'></img>
             </div>
             <div class="output-container">
                 <h2>Result</h2>

@@ -1,6 +1,6 @@
-import { weightedNonMaxSuppression, generateBoxDecoder, sigmoid } from './blazeUtils.js';
-import { CONSTANTS } from './constants.js';
-import { loadInputImage, Normalization } from './demoUtils.js';
+import { weightedNonMaxSuppression, generateBoxDecoder, sigmoid } from '../common/blazeUtils.js';
+import { CONSTANTS } from '../common/constants.js';
+import { loadInputImage, Normalization } from '../common/demoUtils.js';
 import anchors from './blazefaceAnchors.js';
 
 const REQUIRED_INPUT_WIDTH = 128;

@@ -1,6 +1,6 @@
-import { weightedNonMaxSuppression, generateBoxDecoder, sigmoid } from './blazeUtils.js';
-import { CONSTANTS } from './constants.js';
-import { loadInputImage, Normalization, normalizeRadians } from './demoUtils.js';
+import { weightedNonMaxSuppression, generateBoxDecoder, sigmoid } from '../common/blazeUtils.js';
+import { CONSTANTS } from '../common/constants.js';
+import { loadInputImage, Normalization, normalizeRadians } from '../common/demoUtils.js';
 import anchors from './blazehandAnchors.js';
 
 const BLAZEPALM_REQUIRED_INPUT_WIDTH = 256;

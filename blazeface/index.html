@@ -5,12 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Blaze Face | ailia.js Demo</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../style.css" />
 
     <script type='module'>
-        import { Ailia } from './ailia-js/ailia.js';
+        import { Ailia } from '../ailia-js/ailia.js';
         import { computeBlazeface, plotFaces } from './blazefaceUtils.js';
-        import { delay, setStatus, changeSampleImage, createAiliaWithModel, setupSampleImageRunButton, setupVideoStreamRunButton } from './demoUtils.js';
+        import { delay, setStatus, changeSampleImage, createAiliaWithModel, setupSampleImageRunButton, setupVideoStreamRunButton } from '../common/demoUtils.js';
 
         // Only used for the bundled sample image, not for the camera stream
         const SAMPLE_IMAGE_SCORE_THRESHOLD = 0.85;
@@ -75,7 +75,7 @@
     <div class="page page--wide">
 
         <header class="site-header">
-            <a class="back-link" href="index.html">&larr; ailia.js Demo</a>
+            <a class="back-link" href="../">&larr; ailia.js Demo</a>
             <h1>Blaze Face</h1>
             <p class="tagline">Face detection running in your browser with WebAssembly.</p>
         </header>
@@ -90,7 +90,7 @@
         <div class="io-container">
             <div class="input-container">
                 <h2>Sample image (click to change)</h2>
-                <img class="sample-image" src='sample-image.jpg'></img>
+                <img class="sample-image" src='../images/sample-image.jpg'></img>
             </div>
             <div class="output-container">
                 <h2>Result</h2>
